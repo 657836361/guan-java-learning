@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: redis_learn
+  redis:
+    host: 101.43.18.166
+    port: 6379
+    password: 8525456
