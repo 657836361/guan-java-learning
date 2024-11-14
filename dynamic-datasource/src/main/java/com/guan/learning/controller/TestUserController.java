@@ -12,13 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestUserController {
 
     @Autowired
-    TestUserMapper testUserMapper;
+    private TestUserMapper testUserMapper;
 
     @GetMapping("/{datasourceName}")
     public String getMasterData(@PathVariable("datasourceName") String datasourceName) {
         DataSourceContext.setDataSource(datasourceName);
         TestUser testUser = testUserMapper.selectOne(null);
         DataSourceContext.removeDataSource();
+        return testUser.getUserName();
+    }
+
+    @GetMapping("")
+    public String annoWay() {
+        TestUser testUser = testUserMapper.selectOne(null);
         return testUser.getUserName();
     }
 }

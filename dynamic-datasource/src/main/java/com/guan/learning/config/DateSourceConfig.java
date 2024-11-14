@@ -1,18 +1,27 @@
 package com.guan.learning.config;
 
+import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Configuration
+@MapperScan(basePackages = "com.guan.learning.mapper")
 public class DateSourceConfig {
+
+    @Bean
+    public Interceptor dynamicDataSourceInterceptor() {
+        return new DynamicDataSourceInterceptor();
+    }
+
     @Bean
     @ConfigurationProperties("spring.datasource.master")
     public DataSource masterDataSource() {
@@ -37,12 +46,4 @@ public class DateSourceConfig {
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
         return dynamicDataSource;
     }
-//
-//    @Bean(name = "sqlSessionFactory")
-//    public SqlSessionFactory dynamicSqlSessionFactory(@Qualifier("dynamicDataSource") DataSource dynamicDataSource) throws Exception {
-//        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-//        bean.setDataSource(dynamicDataSource);
-//        return bean.getObject();
-//    }
-
 }
