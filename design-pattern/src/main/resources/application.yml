@@ -1,0 +1,18 @@
+
+#spring config
+spring:
+  profiles:
+    active: @env@
+  application:
+    name: learning
+# ============
+# Logger 配置
+# ============
+logging:
+  config: classpath:logback-spring.xml
+  path: ./log
+  level:
+    default: info
+    jdbc: debug
+  file:
+    max-history: 24
