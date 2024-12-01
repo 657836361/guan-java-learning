@@ -25,7 +25,7 @@ public class PubishConfirmController implements InitializingBean {
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private MyCallBack myCallBack;
-    @Value("${enable.rabbitmq.pubilish-confirm}")
+    @Value("${spring.rabbitmq.pubilish-confirm}")
     private boolean enableRabbitmqRubilishConfirm;
 
     /**

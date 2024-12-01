@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: rabbitmq_learn
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: ${RABBIT_MQ_PORT}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    ## 生产端配置
+    #交换机不可达处理配置
+    publisher-confirm-type: correlated
+    #路由不可达处理配置
+    publisher-returns: true
+    #自定义配置 是否开启发布确认包下的发布确认
+    pubilish-confirm: true
+    ## 消费端配置
+    listener:
+      simple:
+        acknowledge-mode: manual

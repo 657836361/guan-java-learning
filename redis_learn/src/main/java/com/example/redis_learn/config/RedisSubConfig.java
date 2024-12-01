@@ -28,7 +28,7 @@ public class RedisSubConfig {
      * @return
      */
     @Bean
-    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+    public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
@@ -46,7 +46,7 @@ public class RedisSubConfig {
      * @return
      */
     @Bean
-    MessageListenerAdapter listenerAdapter(RedisConcumerService receiver) {
+    public MessageListenerAdapter listenerAdapter(RedisConcumerService receiver) {
         return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 
@@ -57,7 +57,7 @@ public class RedisSubConfig {
      * @return
      */
     @Bean
-    StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+    public StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
 

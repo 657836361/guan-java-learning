@@ -1,7 +1,6 @@
 package com.example.redis_learn.config;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONWriter;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -23,7 +22,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return new byte[0];
         }
-        return JSON.toJSONBytes(t, JSONWriter.Feature.WriteClassName);
+        return JSON.toJSONBytes(t);
     }
 
     @Override
