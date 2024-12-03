@@ -33,6 +33,6 @@ public class StrategyController {
 
     @GetMapping("/process")
     public void audit(@RequestBody ProcessRequest request) {
-        log.info("{}",request.getStrategyEnum());
+        log.info("{}", request.getStrategyEnum());
     }
 }
