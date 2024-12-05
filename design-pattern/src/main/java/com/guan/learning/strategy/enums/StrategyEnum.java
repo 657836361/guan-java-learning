@@ -8,11 +8,4 @@ public enum StrategyEnum {
     AUDIT,
     DEAL,
     ;
-
-    public static StrategyEnum getEnum(String code) {
-        for (StrategyEnum anEnum : StrategyEnum.values()) {
-            // ds
-        }
-        return null;
-    }
 }

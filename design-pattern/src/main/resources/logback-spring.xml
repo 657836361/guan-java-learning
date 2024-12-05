@@ -2,6 +2,7 @@
 
 <configuration>
 
+    <!-- 可以读取配置文件-->
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <property name="LOG_HOME" value="logs"/>
     <property name="PATTERN" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%logger{50}] [%L] [%X{tracerId}] %m%n"/>

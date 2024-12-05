@@ -10,7 +10,6 @@ spring:
 # ============
 logging:
   config: classpath:logback-spring.xml
-  path: ./log
   level:
     default: info
     jdbc: debug
