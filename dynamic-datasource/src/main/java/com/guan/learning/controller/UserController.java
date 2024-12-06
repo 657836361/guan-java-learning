@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.guan.learning.common.dict.model.BaseSysDictDataVo;
+import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.context.DataSourceContext;
 import com.guan.learning.mapper.UserMapper;
 import com.guan.learning.pojo.User;
@@ -32,6 +33,7 @@ public class UserController {
         BaseSysDictDataVo gender = new BaseSysDictDataVo();
         gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
         user.setGender(gender);
+        user.setRole(RandomUtil.randomBoolean() ? SysRoleEnum.USER : SysRoleEnum.ADMIN);
         userMapper.insert(user);
         return ResponseEntity.ofNullable(user);
     }

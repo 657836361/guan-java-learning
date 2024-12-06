@@ -1,4 +1,4 @@
-package com.guan.learning.common.bean;
+package com.guan.learning.common.dict;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.guan.learning.common.dict.model.BaseSysDictDataVo;
