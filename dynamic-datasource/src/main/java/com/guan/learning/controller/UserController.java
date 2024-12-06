@@ -3,6 +3,7 @@ package com.guan.learning.controller;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.context.DataSourceContext;
 import com.guan.learning.mapper.UserMapper;
 import com.guan.learning.pojo.User;
@@ -28,6 +29,9 @@ public class UserController {
         user.setAge(RandomUtil.randomInt(0, 99));
         user.setName(RandomUtil.randomChinese() + "" + RandomUtil.randomChinese());
         user.setEmail(RandomUtil.randomString(9) + "@qq.com");
+        BaseSysDictDataVo gender = new BaseSysDictDataVo();
+        gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
+        user.setGender(gender);
         userMapper.insert(user);
         return ResponseEntity.ofNullable(user);
     }
@@ -45,7 +49,8 @@ public class UserController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ofNullable(userMapper.selectList(new QueryWrapper<>()));
+        List<User> users = userMapper.selectList(new QueryWrapper<>());
+        return ResponseEntity.ofNullable(users);
     }
 
     @GetMapping("/{datasourceName}")
