@@ -1,5 +1,6 @@
 package com.guan.learning.config;
 
+import cn.hutool.core.util.StrUtil;
 import com.guan.learning.anno.ThisDynamicDataSource;
 import com.guan.learning.context.DataSourceContext;
 import org.apache.ibatis.cache.CacheKey;
@@ -30,9 +31,16 @@ public class DynamicDataSourceInterceptor implements Interceptor {
         // 使用反射加载类并获取方法
         Class<?> mapperClass = Class.forName(className);
         ThisDynamicDataSource dataSource = mapperClass.getAnnotation(ThisDynamicDataSource.class);
+        if (dataSource == null) {
+            return invocation.proceed();
+        }
+        String dataSourceName = dataSource.dataSourceName();
+        if (StrUtil.isEmpty(dataSourceName)) {
+            dataSourceName = "master";
+        }
         // 在此处可以读取注解，进行动态数据源切换
         try {
-            DataSourceContext.setDataSource(dataSource.dataSourceName()); // 示例
+            DataSourceContext.setDataSource(dataSourceName); // 示例
             return invocation.proceed();
         } finally {
             DataSourceContext.removeDataSource();

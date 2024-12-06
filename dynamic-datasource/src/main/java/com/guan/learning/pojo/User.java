@@ -1,15 +1,15 @@
 package com.guan.learning.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import com.guan.learning.common.pojo.BaseDeletedModel;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @TableName("`user`")
-public class User {
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+public class User extends BaseDeletedModel {
+
     private String name;
     private Integer age;
     private String email;
