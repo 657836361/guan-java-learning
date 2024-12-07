@@ -20,7 +20,7 @@ public class TracerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String traceId = request.getHeader(BaseConstants.LOG_TRACE);
+            String traceId = MDC.get(BaseConstants.LOG_TRACE);
             if (StrUtil.isBlank(traceId)) {
                 traceId = IdUtil.fastSimpleUUID();
             }

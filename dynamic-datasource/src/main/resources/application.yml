@@ -1,6 +1,8 @@
 spring:
   application:
     name: learning
+  profiles:
+    active: @env@
   datasource:
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
