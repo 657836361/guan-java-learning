@@ -1,8 +1,11 @@
 package com.guan.learning.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
@@ -10,7 +13,9 @@ import com.guan.learning.common.pojo.response.CommonResponse;
 import com.guan.learning.context.DataSourceContext;
 import com.guan.learning.mapper.UserMapper;
 import com.guan.learning.pojo.User;
+import com.guan.learning.pojo.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Validated
 public class UserController {
 
     @Autowired
@@ -56,6 +62,21 @@ public class UserController {
     public BaseResponse<List<User>> getAll() {
         List<User> users = userMapper.selectList(new QueryWrapper<>());
         return CommonResponse.withSuccess(users);
+    }
+
+    @GetMapping("/page")
+    public BaseResponse<IPage<User>> page(UserRequest userRequest) {
+        IPage<User> userIPage = userMapper.selectPage(
+                Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
+                Wrappers.lambdaQuery(User.class).
+                        eq(StrUtil.isNotEmpty(userRequest.getName()), User::getName, userRequest.getName()).
+                        between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
+                                User::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
+                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), User::getEmail, userRequest.getEmail()).
+                        eq(StrUtil.isNotEmpty(userRequest.getGender()), User::getGender, userRequest.getGender()).
+                        eq(userRequest.getRole() != null, User::getRole, userRequest.getRole().getCode())
+        );
+        return CommonResponse.withSuccess(userIPage);
     }
 
     @GetMapping("/datasource/{datasourceName}")
