@@ -16,13 +16,9 @@ import com.guan.learning.pojo.User;
 import com.guan.learning.pojo.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,8 +33,16 @@ public class UserController {
     public BaseResponse<User> insert() {
         User user = new User();
         user.setAge(RandomUtil.randomInt(0, 99));
-        user.setName(RandomUtil.randomChinese() + "" + RandomUtil.randomChinese());
-        user.setEmail(RandomUtil.randomString(9) + "@qq.com");
+        StringBuilder name = new StringBuilder();
+        int randomInt = RandomUtil.randomInt(2, 6);
+        for (int i = 0; i < randomInt; i++) {
+            name.append(RandomUtil.randomChinese());
+        }
+        user.setName(name.toString());
+        user.setEmail(RandomUtil.randomString(RandomUtil.randomInt(6, 10)) +
+                "@" +
+                RandomUtil.randomString(RandomUtil.randomInt(2, 5)) +
+                ".com" + (RandomUtil.randomBoolean() ? ".cn" : ""));
         BaseSysDictDataVo gender = new BaseSysDictDataVo();
         gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
         user.setGender(gender);
@@ -61,6 +65,17 @@ public class UserController {
     @GetMapping("/all")
     public BaseResponse<List<User>> getAll() {
         List<User> users = userMapper.selectList(new QueryWrapper<>());
+        return CommonResponse.withSuccess(users);
+    }
+
+    @GetMapping("/all/lambda")
+    public BaseResponse<List<User>> getAllLambda() {
+        List<User> users = new ArrayList<>();
+
+        userMapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
+            User user = resultContext.getResultObject();
+
+        });
         return CommonResponse.withSuccess(users);
     }
 

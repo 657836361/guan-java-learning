@@ -34,6 +34,8 @@ mybatis-plus:
       # 逻辑未删除值
       logic-not-delete-value: 'null'
   configuration:
+    # 设置默认的查询最大数量为1000
+    default-fetch-size: 1000
     # 启用从经典数据库列名A_column到驼峰大小写经典Java属性名aColumn的自动映射
     map-underscore-to-camel-case: true
     # 设置驱动程序等待数据库响应的秒数
