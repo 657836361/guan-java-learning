@@ -1,5 +1,11 @@
 server:
   port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 800 #最大工作线程数量
+    min-spare-threads: 20 #最小工作线程数量
+    #max-connections: 10000 #一瞬间最大支持的并发的连接数
+    accept-count: 200 #等待队列长度
   compression:
     enabled: true
     mine-type: application/json
@@ -42,4 +48,4 @@ mybatis-plus:
     default-Statement-Timeout: 5
     # 全局启用或禁用在此配置下任何映射器中配置的任何缓存
     cache-enabled: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

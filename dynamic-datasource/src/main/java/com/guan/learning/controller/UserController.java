@@ -14,13 +14,21 @@ import com.guan.learning.context.DataSourceContext;
 import com.guan.learning.mapper.UserMapper;
 import com.guan.learning.pojo.User;
 import com.guan.learning.pojo.UserRequest;
+import com.guan.learning.pojo.UserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -68,13 +76,19 @@ public class UserController {
         return CommonResponse.withSuccess(users);
     }
 
+    /**
+     * MyBatis-Plus 从 3.5.4 版本开始支持流式查询
+     *
+     * @return
+     * @since 3.5.4
+     */
     @GetMapping("/all/lambda")
-    public BaseResponse<List<User>> getAllLambda() {
-        List<User> users = new ArrayList<>();
-
+    public BaseResponse<List<UserVo>> getAllLambda() {
+        List<UserVo> users = new ArrayList<>();
         userMapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
+            log.info("开始处理第{}条数据", resultContext.getResultCount());
             User user = resultContext.getResultObject();
-
+            users.add(UserVo.newInstance(user));
         });
         return CommonResponse.withSuccess(users);
     }
