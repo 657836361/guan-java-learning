@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mine-type: application/json
+    min-response-size: 1024
+
+spring:
+  application:
+    name: spring-test
+  profiles:
+    active: @env@
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbcUrl: ${DB_MASTER_URL}
+    username: ${DB_MASTER_USER}
+    password: ${DB_MASTER_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      # 全局逻辑删除字段名
+      logic-delete-field: deleted
+      # 逻辑已删除值
+      logic-delete-value: now()
+      # 逻辑未删除值
+      logic-not-delete-value: 'null'
+  configuration:
+    # 启用从经典数据库列名A_column到驼峰大小写经典Java属性名aColumn的自动映射
+    map-underscore-to-camel-case: true
+    # 设置驱动程序等待数据库响应的秒数
+    default-Statement-Timeout: 5
+    # 全局启用或禁用在此配置下任何映射器中配置的任何缓存
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

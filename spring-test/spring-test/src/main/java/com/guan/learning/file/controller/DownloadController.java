@@ -1,4 +1,4 @@
-package com.guan.learning.controller;
+package com.guan.learning.file.controller;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import jakarta.servlet.http.HttpServletResponse;
