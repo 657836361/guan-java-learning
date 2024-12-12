@@ -1,0 +1,9 @@
+com.guan.learning.common.bean.AutoFillingMetaObjectHandler
+com.guan.learning.common.bean.CommonResponseAdvice
+com.guan.learning.common.bean.EnumJacksonCustomizer
+com.guan.learning.common.bean.MybatisPlusConfig
+com.guan.learning.common.bean.SensitiveDataSerializer
+com.guan.learning.common.bean.SysRoleEnumConverter
+com.guan.learning.common.dict.service.DictService
+com.guan.learning.common.exceptions.handler.GlobalExceptionHandler
+com.guan.learning.common.filter.TracerFilter
