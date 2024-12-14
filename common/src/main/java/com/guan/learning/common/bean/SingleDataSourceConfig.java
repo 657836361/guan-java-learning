@@ -1,7 +1,6 @@
-package com.guan.learning.mybatisplus.config;
+package com.guan.learning.common.bean;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -12,14 +11,17 @@ import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
-@MapperScan(basePackages = {"com.guan.learning.mybatisplus.mapper", "com.guan.learning.common.dict.mapper"})
-public class DataSourceConfig {
+public class SingleDataSourceConfig {
 
+    static {
+        log.info("SingleDataSourceConfig invoked");
+    }
 
     @Bean
     @ConfigurationProperties("spring.datasource")
     @ConditionalOnMissingBean(DataSource.class)
     public DataSource dataSource() {
+        log.info("SingleDateSource created");
         return DataSourceBuilder.create().build();
     }
 
