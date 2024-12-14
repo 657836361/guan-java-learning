@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +70,11 @@ public class UserController {
         return CommonResponse.withSuccess();
     }
 
+    /**
+     * 一下子查了很多很多 这种情况可能会oom
+     * 推荐使用流式处理
+     * @return
+     */
     @GetMapping("/all")
     public BaseResponse<List<User>> getAll() {
         List<User> users = userMapper.selectList(new QueryWrapper<>());
@@ -83,21 +87,52 @@ public class UserController {
      * @return
      * @since 3.5.4
      */
-    @GetMapping("/all/lambda")
-    public BaseResponse<List<UserVo>> getAllLambda() {
-        List<UserVo> users = new ArrayList<>();
-        userMapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
-            log.info("开始处理第{}条数据", resultContext.getResultCount());
-            User user = resultContext.getResultObject();
-            users.add(UserVo.newInstance(user));
-        });
-        return CommonResponse.withSuccess(users);
+    @GetMapping("/all/stream")
+    public BaseResponse<Void> getAllStream() {
+        userMapper.selectList(Wrappers.emptyWrapper(),
+                resultContext -> {
+                    log.info("开始处理第{}条数据", resultContext.getResultCount());
+                    UserVo.newInstance(resultContext.getResultObject());
+                });
+        return CommonResponse.withSuccess();
+    }
+
+    /**
+     * MyBatis-Plus 从 3.5.4 版本开始支持流式查询
+     *
+     * @return
+     * @since 3.5.4
+     */
+    @GetMapping("/page/stream")
+    public BaseResponse<Void> pageStream() {
+        userMapper.selectList(Page.of(1, 10000),
+                Wrappers.emptyWrapper(),
+                resultContext -> {
+                    log.info("开始处理第{}条数据", resultContext.getResultCount());
+                    UserVo.newInstance(resultContext.getResultObject());
+                });
+        return CommonResponse.withSuccess();
     }
 
     @GetMapping("/page")
     public BaseResponse<IPage<User>> page(UserRequest userRequest) {
         IPage<User> userIPage = userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
+                Wrappers.lambdaQuery(User.class).
+                        eq(StrUtil.isNotEmpty(userRequest.getName()), User::getName, userRequest.getName()).
+                        between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
+                                User::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
+                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), User::getEmail, userRequest.getEmail()).
+                        eq(StrUtil.isNotEmpty(userRequest.getGender()), User::getGender, userRequest.getGender()).
+                        eq(userRequest.getRole() != null, User::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
+        );
+        return CommonResponse.withSuccess(userIPage);
+    }
+
+    @GetMapping("/page/default")
+    public BaseResponse<IPage<User>> pageDefault(UserRequest userRequest) {
+        IPage<User> userIPage = userMapper.selectPage(
+                Page.of(Optional.ofNullable(userRequest.getPageNo()).orElse(1), Optional.ofNullable(userRequest.getPageSize()).orElse(20)),
                 Wrappers.lambdaQuery(User.class).
                         eq(StrUtil.isNotEmpty(userRequest.getName()), User::getName, userRequest.getName()).
                         between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,

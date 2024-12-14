@@ -38,5 +38,5 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     # 设置驱动程序等待数据库响应的秒数
     default-Statement-Timeout: 5
-    # 全局启用或禁用在此配置下任何映射器中配置的任何缓存
+    # 是否开启二级缓存 非session级别的缓存
     cache-enabled: false

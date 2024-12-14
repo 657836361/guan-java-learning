@@ -3,10 +3,13 @@ package com.guan.learning.mybatisplus.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.guan.learning.common.bean.SensitiveDataSerializer;
+import com.guan.learning.common.dict.model.BaseSysDictDataVo;
+import com.guan.learning.common.enums.SysRoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -31,8 +34,8 @@ public class UserVo {
         userVo.setName(user.getName());
         userVo.setAge(user.getAge());
         userVo.setEmail(user.getEmail());
-        userVo.setGender(user.getGender().getDictDataName());
-        userVo.setRole(user.getRole().getDesc());
+        userVo.setGender(Optional.ofNullable(user.getGender()).map(BaseSysDictDataVo::getDictDataName).orElse(null));
+        userVo.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getDesc).orElse(null));
         userVo.setGmtCreate(user.getGmtCreate());
         return userVo;
     }
