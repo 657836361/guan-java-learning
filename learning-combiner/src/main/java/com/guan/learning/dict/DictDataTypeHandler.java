@@ -3,7 +3,7 @@ package com.guan.learning.dict;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.guan.learning.dict.model.BaseSysDictDataVo;
 import com.guan.learning.dict.model.SysDictData;
-import com.guan.learning.dict.service.DictService;
+import com.guan.learning.dict.util.DictCacheUtil;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
@@ -37,7 +37,7 @@ public class DictDataTypeHandler implements TypeHandler<BaseSysDictDataVo> {
     }
 
     private BaseSysDictDataVo parse(String dataCode) {
-        SysDictData dictData = DictService.getSysDictDataByDataCode(dataCode);
+        SysDictData dictData = DictCacheUtil.get(dataCode);
         if (dictData != null) {
             BaseSysDictDataVo result = new BaseSysDictDataVo();
             result.setDictDataName(dictData.getDictDataName());
