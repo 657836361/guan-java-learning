@@ -1,12 +1,13 @@
-package com.guan.learning.common.bean;
+package com.guan.learning.common;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 /**
  * 使用多个插件时，需要注意它们的顺序。建议的顺序是：
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
  */
 @Configuration
-@ConditionalOnBean(MybatisPlusAutoConfiguration.class)
+@ConditionalOnBean(DataSource.class)
 public class MybatisPlusConfig {
 
     /**

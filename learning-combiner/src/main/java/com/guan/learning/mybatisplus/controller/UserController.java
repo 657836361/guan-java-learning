@@ -10,7 +10,7 @@ import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
-import com.guan.learning.context.DataSourceContext;
+import com.guan.learning.dynamic.context.DataSourceContext;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import com.guan.learning.mybatisplus.pojo.User;
 import com.guan.learning.mybatisplus.pojo.UserRequest;

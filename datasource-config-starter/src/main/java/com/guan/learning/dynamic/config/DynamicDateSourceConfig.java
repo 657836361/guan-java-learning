@@ -1,37 +1,28 @@
-package com.guan.learning.config;
+package com.guan.learning.dynamic.config;
 
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.guan.learning.DynamicDataSource;
+import com.guan.learning.dynamic.DynamicDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
 @Slf4j
 public class DynamicDateSourceConfig {
 
-    static {
-        log.info("DynamicDateSourceConfig invoked");
-    }
-
     @Bean("masterDataSource")
-    @ConfigurationProperties("spring.datasource.master")
+    @ConfigurationProperties("spring.config.datasource.master")
     public DataSource masterDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean("slaveDataSource")
-    @ConfigurationProperties("spring.datasource.slave")
+    @ConfigurationProperties("spring.config.datasource.slave")
     public DataSource slaveDataSource() {
         return DataSourceBuilder.create().build();
     }

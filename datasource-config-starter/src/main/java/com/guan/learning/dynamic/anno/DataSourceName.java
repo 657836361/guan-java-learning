@@ -1,4 +1,4 @@
-package com.guan.learning.anno;
+package com.guan.learning.dynamic.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.guan.learning</groupId>
-            <artifactId>dynamic-datasource-starter</artifactId>
+            <artifactId>datasource-config-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

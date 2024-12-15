@@ -1,4 +1,4 @@
-package com.guan.learning.context;
+package com.guan.learning.dynamic.context;
 
 /**
  * 此类提供线程局部变量。这些变量不同于它们的正常对应关系是每个线程访问一个线程(通过get、set方法),有自己的独立初始化变量的副本。

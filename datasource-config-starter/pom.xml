@@ -10,7 +10,7 @@
         <relativePath>../root/pom.xml</relativePath>
     </parent>
 
-    <artifactId>dynamic-datasource-starter</artifactId>
+    <artifactId>datasource-config-starter</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0</version>
 
