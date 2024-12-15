@@ -1,16 +1,16 @@
 package com.guan.learning;
 
-import com.guan.learning.dynamic.anno.EnableDynamicDataSource;
+import com.guan.learning.anno.EnableDataSource;
+import com.guan.learning.enums.DataSourceMode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
- * 是否启动动态数据源取决于是否使用该注解
- *
- * @see EnableDynamicDataSource
+ * @see EnableDataSource
  */
-//@EnableDynamicDataSource
-@SpringBootApplication
+@EnableDataSource(mode = DataSourceMode.NORMAL)
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class LearningCombinerApplication {
     public static void main(String[] args) {
         SpringApplication.run(LearningCombinerApplication.class, args);

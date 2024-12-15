@@ -1,7 +1,7 @@
-package com.guan.learning.common.dict.mapper;
+package com.guan.learning.dict.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.guan.learning.common.dict.model.SysDictData;
+import com.guan.learning.dict.model.SysDictData;
 
 /**
  * @author GG

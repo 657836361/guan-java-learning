@@ -1,22 +1,22 @@
-package com.guan.learning.common.dict.service;
+package com.guan.learning.dict.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.guan.learning.common.dict.mapper.SysDictDataMapper;
-import com.guan.learning.common.dict.model.SysDictData;
+import com.guan.learning.common.config.MapperScanConfig;
+import com.guan.learning.dict.mapper.SysDictDataMapper;
+import com.guan.learning.dict.model.SysDictData;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
-@ConditionalOnBean(DataSource.class)
+@ConditionalOnBean(MapperScanConfig.class)
 public class DictService implements InitializingBean {
     private static final List<SysDictData> CACHE = new CopyOnWriteArrayList<>();
     private static final Map<String, SysDictData> CACHE_DATA_CODE = new HashMap<>();

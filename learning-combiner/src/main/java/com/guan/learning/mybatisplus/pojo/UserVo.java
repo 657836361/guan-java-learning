@@ -3,8 +3,8 @@ package com.guan.learning.mybatisplus.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.guan.learning.common.bean.SensitiveDataSerializer;
-import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.common.enums.SysRoleEnum;
+import com.guan.learning.dict.model.BaseSysDictDataVo;
 import lombok.Getter;
 import lombok.Setter;
 

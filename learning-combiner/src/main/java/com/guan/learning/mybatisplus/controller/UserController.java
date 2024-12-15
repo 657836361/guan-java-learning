@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
+import com.guan.learning.dict.model.BaseSysDictDataVo;
 import com.guan.learning.dynamic.context.DataSourceContext;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import com.guan.learning.mybatisplus.pojo.User;
@@ -17,6 +17,7 @@ import com.guan.learning.mybatisplus.pojo.UserRequest;
 import com.guan.learning.mybatisplus.pojo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +26,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@ConditionalOnBean(DataSource.class)
 @Validated
 public class UserController {
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     @PostMapping("")

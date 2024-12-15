@@ -2,11 +2,11 @@ package com.guan.learning.mybatisplus.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.guan.learning.common.dict.DictDataTypeHandler;
-import com.guan.learning.common.dict.model.BaseSysDictDataVo;
 import com.guan.learning.common.enums.BaseEnumTypeHandler;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.BaseDeletedModel;
+import com.guan.learning.dict.DictDataTypeHandler;
+import com.guan.learning.dict.model.BaseSysDictDataVo;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.guan.learning.common.dict.model;
+package com.guan.learning.dict.model;
 
 import lombok.Getter;
 import lombok.Setter;
