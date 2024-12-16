@@ -1,8 +1,11 @@
 package com.guan.learning.excel.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.excel.dto.UserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +38,7 @@ public class ExcelController {
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" +
-                URLEncoder.encode("测试", StandardCharsets.UTF_8) + ".xlsx");
+                URLEncoder.encode("测试", StandardCharsets.UTF_8) + "exportAll.xlsx");
 
         try {
             EasyExcel.write(response.getOutputStream(), UserDto.class)
@@ -45,5 +48,29 @@ public class ExcelController {
         } catch (Exception e) {
             log.error("error", e);
         }
+    }
+
+    @GetMapping("/export/multi/sheet")
+    public void exportMultiSheet() {
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" +
+                URLEncoder.encode("测试", StandardCharsets.UTF_8) + "exportMultiSheet.xlsx");
+
+        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), UserDto.class).build()) {
+            for (int i = 0; i < 5; i++) {
+                // 这里注意 如果同一个sheet只要创建一次
+                WriteSheet writeSheet = EasyExcel.writerSheet("data" + i).build();
+                int current = i;
+                excelWriter.write(() -> userMapper.selectList(Page.of(current, 5000),
+                        Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList()), writeSheet
+                );
+            }
+        } catch (Exception e) {
+            log.error("error", e);
+        }
+
     }
 }
