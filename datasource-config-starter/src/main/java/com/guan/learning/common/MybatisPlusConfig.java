@@ -3,6 +3,8 @@ package com.guan.learning.common;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +15,14 @@ import org.springframework.context.annotation.Configuration;
  * SQL 性能规范、防止全表更新与删除
  * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
  */
+@Slf4j
 @Configuration
 public class MybatisPlusConfig {
+
+    @PostConstruct
+    public void init(){
+        log.info("MybatisPlusConfig inited");
+    }
 
     /**
      * 分页插件

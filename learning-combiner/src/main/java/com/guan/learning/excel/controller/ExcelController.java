@@ -6,13 +6,11 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.guan.learning.common.config.MapperScanConfig;
 import com.guan.learning.excel.dto.UserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/excel")
-@ConditionalOnBean(MapperScanConfig.class)
 public class ExcelController {
     @Autowired
     private HttpServletResponse response;

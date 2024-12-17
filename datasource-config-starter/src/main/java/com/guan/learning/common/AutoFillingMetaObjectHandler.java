@@ -3,6 +3,7 @@ package com.guan.learning.common;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,11 @@ import java.util.Date;
 @Slf4j
 @Component
 public class AutoFillingMetaObjectHandler implements MetaObjectHandler {
+
+    @PostConstruct
+    public void init(){
+        log.info("MetaObjectHandler inited");
+    }
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "bizId", String.class, IdUtil.fastSimpleUUID());

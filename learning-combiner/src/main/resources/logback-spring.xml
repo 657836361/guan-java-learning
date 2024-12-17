@@ -76,7 +76,7 @@
         </root>
         <!-- 开发环境, 指定某包日志为debug级 -->
         <logger name="com.guan.learning" level="debug"/>
-        <logger name="org.springframework" level="debug"/>
+<!--        <logger name="org.springframework" level="debug"/>-->
     </springProfile>
 
     <springProfile name="prd">

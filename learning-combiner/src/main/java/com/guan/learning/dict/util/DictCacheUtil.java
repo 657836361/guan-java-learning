@@ -17,7 +17,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnBean(MapperScanConfig.class)
 public class DictCacheUtil implements ApplicationContextAware, SmartInitializingSingleton {
 
     public static final int CACHE_QUEUE_SIZE = 10;

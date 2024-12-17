@@ -1,20 +1,4 @@
 
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PASSWORD}
-    master:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: ${DB_MASTER_URL}
-      username: ${DB_MASTER_USER}
-      password: ${DB_MASTER_PASSWORD}
-    slave:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: ${DB_SLAVE_URL}
-      username: ${DB_SLAVE_USER}
-      password: ${DB_SLAVE_PASSWORD}
 
 mybatis-plus:
   global-config:

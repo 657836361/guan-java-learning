@@ -19,6 +19,25 @@ spring:
     name: learning-combiner
   profiles:
     active: @env@
+  config:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbcUrl: ${DATASOURCE_URL}
+      username: ${DATASOURCE_USER}
+      password: ${DATASOURCE_PASSWORD}
+      pool-size: 20
+      master:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbcUrl: ${DB_MASTER_URL}
+        username: ${DB_MASTER_USER}
+        password: ${DB_MASTER_PASSWORD}
+        pool-size: ${spring.datasource.pool-size}
+      slave:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbcUrl: ${DB_SLAVE_URL}
+        username: ${DB_SLAVE_USER}
+        password: ${DB_SLAVE_PASSWORD}
+        pool-size: ${spring.datasource.pool-size}
 
 logging:
   config: classpath:logback-spring.xml

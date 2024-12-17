@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @EnableDataSource 不生效或不存在时时移除MapperScanConfig的BeanDefinition
  */
 @Slf4j
-@Component
+//@Component
 public class UnableDataSourceRemoveBeanPostProcessor implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
     @Override
