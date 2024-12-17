@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.guan.learning.common.config.MapperScanConfig;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
@@ -26,18 +27,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
-@ConditionalOnBean(DataSource.class)
 @Validated
+@ConditionalOnBean(MapperScanConfig.class)
 public class UserController {
 
-    @Autowired(required = false)
+    @Autowired
     private UserMapper userMapper;
 
     @PostMapping("")

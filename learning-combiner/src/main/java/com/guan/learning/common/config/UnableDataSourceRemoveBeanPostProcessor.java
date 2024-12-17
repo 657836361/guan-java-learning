@@ -7,6 +7,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class UnableDataSourceRemoveBeanPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class UnableDataSourceRemoveBeanPostProcessor implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
@@ -27,5 +28,10 @@ public class UnableDataSourceRemoveBeanPostProcessor implements BeanDefinitionRe
                 log.warn("mapperScanConfig bean not exists");
             }
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE;
     }
 }

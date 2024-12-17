@@ -28,4 +28,4 @@ mybatis-plus:
   configuration:
     # mysql该配置好像失效的
     default-fetch-size: 100
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

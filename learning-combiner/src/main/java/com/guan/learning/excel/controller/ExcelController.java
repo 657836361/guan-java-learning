@@ -6,11 +6,13 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.guan.learning.common.config.MapperScanConfig;
 import com.guan.learning.excel.dto.UserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +24,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/excel")
+@ConditionalOnBean(MapperScanConfig.class)
 public class ExcelController {
-    @Autowired(required = false)
+    @Autowired
     private HttpServletResponse response;
 
-    @Autowired(required = false)
+    @Autowired
     private UserMapper userMapper;
 
     @GetMapping("/export/all")
@@ -64,7 +67,7 @@ public class ExcelController {
                 // 这里注意 如果同一个sheet只要创建一次
                 WriteSheet writeSheet = EasyExcel.writerSheet("data" + i).build();
                 int current = i;
-                excelWriter.write(() -> userMapper.selectList(Page.of(current, 5000),
+                excelWriter.write(() -> userMapper.selectList(Page.of(current, 5000, false),
                         Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList()), writeSheet
                 );
             }

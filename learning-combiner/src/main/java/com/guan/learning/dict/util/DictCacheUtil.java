@@ -3,6 +3,8 @@ package com.guan.learning.dict.util;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.LFUCache;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.guan.learning.LearningCombinerApplication;
+import com.guan.learning.anno.EnableDataSource;
 import com.guan.learning.common.config.MapperScanConfig;
 import com.guan.learning.dict.mapper.SysDictDataMapper;
 import com.guan.learning.dict.model.SysDictData;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,7 +49,10 @@ public class DictCacheUtil implements ApplicationContextAware, SmartInitializing
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        mapper = applicationContext.getBean(SysDictDataMapper.class);
+        EnableDataSource enableDataSource = AnnotationUtils.findAnnotation(LearningCombinerApplication.class, EnableDataSource.class);
+        if (enableDataSource != null) {
+            mapper = applicationContext.getBean(SysDictDataMapper.class);
+        }
     }
 
     @Override
@@ -55,12 +61,14 @@ public class DictCacheUtil implements ApplicationContextAware, SmartInitializing
     }
 
     private static void init() {
-        mapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
-            if (resultContext.getResultCount() > CACHE_QUEUE_SIZE) {
-                return;
-            }
-            SysDictData sysDictData = resultContext.getResultObject();
-            CACHE_DATA_CODE.put(sysDictData.getDictDataCode(), sysDictData);
-        });
+        if (mapper != null) {
+            mapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
+                if (resultContext.getResultCount() > CACHE_QUEUE_SIZE) {
+                    return;
+                }
+                SysDictData sysDictData = resultContext.getResultObject();
+                CACHE_DATA_CODE.put(sysDictData.getDictDataCode(), sysDictData);
+            });
+        }
     }
 }
