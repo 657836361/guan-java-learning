@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.guan.learning.common.config.MapperScanConfig;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;

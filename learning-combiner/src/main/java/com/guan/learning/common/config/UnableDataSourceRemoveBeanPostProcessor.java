@@ -10,7 +10,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
 
 /**
  * @EnableDataSource 不生效或不存在时时移除MapperScanConfig的BeanDefinition
