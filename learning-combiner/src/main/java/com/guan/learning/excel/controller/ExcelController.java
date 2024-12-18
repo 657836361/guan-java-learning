@@ -11,17 +11,21 @@ import com.guan.learning.mybatisplus.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping("/excel")
+@ConditionalOnBean(DataSource.class)
 public class ExcelController {
     @Autowired
     private HttpServletResponse response;
@@ -67,6 +71,33 @@ public class ExcelController {
                 excelWriter.write(() -> userMapper.selectList(Page.of(current, 5000, false),
                         Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList()), writeSheet
                 );
+            }
+        } catch (Exception e) {
+            log.error("error", e);
+        }
+
+    }
+
+    @GetMapping("/export/multi/thread/sheet")
+    public void exportMultiThreadSheet() {
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" +
+                URLEncoder.encode("测试", StandardCharsets.UTF_8) + "exportMultiSheet.xlsx");
+
+        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), UserDto.class).build()) {
+            for (int i = 0; i < 5; i++) {
+                int finalI = i;
+                CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                    // 这里注意 如果同一个sheet只要创建一次
+                    WriteSheet writeSheet = EasyExcel.writerSheet("data" + finalI).build();
+                    excelWriter.write(() -> userMapper.selectList(Page.of(finalI, 5000, false),
+                            Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList()), writeSheet
+                    );
+                });
+
             }
         } catch (Exception e) {
             log.error("error", e);

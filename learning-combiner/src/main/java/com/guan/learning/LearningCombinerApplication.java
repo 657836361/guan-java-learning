@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 /**
  * @see EnableDataSource
  */
-@EnableDataSource(mode = DataSourceMode.NORMAL)
+//@EnableDataSource(mode = DataSourceMode.NORMAL)
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class LearningCombinerApplication {
     public static void main(String[] args) {

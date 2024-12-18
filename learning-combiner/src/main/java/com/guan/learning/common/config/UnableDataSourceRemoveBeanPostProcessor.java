@@ -7,6 +7,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,6 @@ public class UnableDataSourceRemoveBeanPostProcessor implements BeanDefinitionRe
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

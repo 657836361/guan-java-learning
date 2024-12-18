@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 @Validated
-@ConditionalOnBean(MapperScanConfig.class)
+@ConditionalOnBean(DataSource.class)
 public class UserController {
 
     @Autowired
