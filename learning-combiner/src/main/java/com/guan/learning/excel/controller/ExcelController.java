@@ -1,5 +1,6 @@
 package com.guan.learning.excel.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
@@ -8,30 +9,45 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.excel.dto.UserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
+import com.guan.learning.mybatisplus.pojo.User;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.sql.DataSource;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @RestController
 @RequestMapping("/excel")
-@ConditionalOnBean(DataSource.class)
 public class ExcelController {
     @Autowired
     private HttpServletResponse response;
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
+
+    Supplier<Collection<?>> allSupplier = () -> {
+        if (userMapper != null) {
+            return userMapper.
+                    selectList(Wrappers.emptyWrapper()).
+                    stream().
+                    map(UserDto::userToUserDto).
+                    collect(Collectors.toList());
+        }
+        return IntStream.
+                range(1000, RandomUtil.randomInt(5000, 100000)).
+                mapToObj(i -> UserDto.userToUserDto(User.generateRandomUserFullField())).
+                collect(Collectors.toList());
+    };
 
     @GetMapping("/export/all")
     public void exportAll() {
@@ -48,7 +64,7 @@ public class ExcelController {
             EasyExcel.write(response.getOutputStream(), UserDto.class)
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                     .sheet("模板")
-                    .doWrite(() -> userMapper.selectList(Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList()));
+                    .doWrite(allSupplier);
         } catch (Exception e) {
             log.error("error", e);
         }

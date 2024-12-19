@@ -59,6 +59,7 @@ public class UserDto {
         userDto.setGmtCreate(user.getGmtCreate());
         userDto.setGmtModify(user.getGmtModify());
         userDto.setCreateUser(user.getCreateUser());
+        userDto.setModifyUser(user.getModifyUser());
         return userDto;
     }
 }

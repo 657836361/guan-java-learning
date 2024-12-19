@@ -1,6 +1,5 @@
 package com.guan.learning.mybatisplus.controller;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,7 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
-import com.guan.learning.dict.model.BaseSysDictDataVo;
 import com.guan.learning.dynamic.context.DataSourceContext;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import com.guan.learning.mybatisplus.pojo.User;
@@ -42,22 +40,7 @@ public class UserController {
 
     @PostMapping("")
     public BaseResponse<User> insert() {
-        User user = new User();
-        user.setAge(RandomUtil.randomInt(0, 99));
-        StringBuilder name = new StringBuilder();
-        int randomInt = RandomUtil.randomInt(2, 6);
-        for (int i = 0; i < randomInt; i++) {
-            name.append(RandomUtil.randomChinese());
-        }
-        user.setName(name.toString());
-        user.setEmail(RandomUtil.randomString(RandomUtil.randomInt(6, 10)) +
-                "@" +
-                RandomUtil.randomString(RandomUtil.randomInt(2, 5)) +
-                ".com" + (RandomUtil.randomBoolean() ? ".cn" : ""));
-        BaseSysDictDataVo gender = new BaseSysDictDataVo();
-        gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
-        user.setGender(gender);
-        user.setRole(RandomUtil.randomBoolean() ? SysRoleEnum.USER : SysRoleEnum.ADMIN);
+        User user = User.generateRandomUser();
         userMapper.insert(user);
         return CommonResponse.withSuccess(user);
     }
