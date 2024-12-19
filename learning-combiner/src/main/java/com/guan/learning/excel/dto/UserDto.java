@@ -2,6 +2,7 @@ package com.guan.learning.excel.dto;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.dict.model.BaseSysDictDataVo;
 import com.guan.learning.mybatisplus.pojo.User;
@@ -17,12 +18,14 @@ public class UserDto {
 
 
     @ExcelProperty(value = "姓名", index = 0)
+    @ColumnWidth(11)
     private String name;
 
     @ExcelProperty(value = "年龄", index = 1)
     private Integer age;
 
     @ExcelProperty(value = "电子邮箱", index = 2)
+    @ColumnWidth(26)
     private String email;
 
     @ExcelProperty(value = "性别", index = 3)
@@ -32,9 +35,11 @@ public class UserDto {
     private String role;
 
     @ExcelProperty(value = "创建时间", index = 5)
+    @ColumnWidth(17)
     private Date gmtCreate;
 
     @ExcelProperty(value = "修改时间", index = 6)
+    @ColumnWidth(17)
     private Date gmtModify;
 
     @ExcelProperty(value = "创建人", index = 7)
