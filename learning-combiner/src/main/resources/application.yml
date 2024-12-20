@@ -59,3 +59,12 @@ mybatis-plus:
     default-Statement-Timeout: 5
     # 是否开启二级缓存 非session级别的缓存
     cache-enabled: false
+
+
+mock:
+  account:
+    name: xiaoru
+    user-id: 646327412
+  # sha256后再base64 原'secret-key'
+  private-key: hdvhXXXvkwjHrg8zx6MkzG9L9Rmi7S8wJ70zwUCk+ao=
+

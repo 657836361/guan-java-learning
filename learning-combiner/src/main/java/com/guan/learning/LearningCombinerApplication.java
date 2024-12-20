@@ -4,6 +4,7 @@ import com.guan.learning.anno.EnableDataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.FilterType;
  * @see EnableDataSource
  */
 //@EnableDataSource(mode = DataSourceMode.NORMAL)
+@ConfigurationPropertiesScan
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 // 两种都行
 //@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.CUSTOM, classes = SpringLifeTypeFilter.class))

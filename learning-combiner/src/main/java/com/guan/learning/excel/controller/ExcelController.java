@@ -8,10 +8,14 @@ import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy
 import com.baomidou.mybatisplus.core.toolkit.SystemClock;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.guan.learning.common.config.Java16RecordConfigProperties;
+import com.guan.learning.common.config.MockConfigProperties;
 import com.guan.learning.common.constant.BaseConstants;
 import com.guan.learning.excel.dto.UserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
 import com.guan.learning.mybatisplus.pojo.User;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +35,22 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("/excel")
 public class ExcelController {
+
+    @Resource
+    private MockConfigProperties mockConfigProperties;
+    @Resource
+    private Java16RecordConfigProperties java16RecordConfigProperties;
     @Autowired
     private HttpServletResponse response;
 
     @Autowired(required = false)
     private UserMapper userMapper;
+
+    @PostConstruct
+    public void init() {
+        log.info(mockConfigProperties.toString());
+        log.info(java16RecordConfigProperties.toString());
+    }
 
     Supplier<Collection<?>> allSupplier = () -> {
         if (userMapper != null) {
