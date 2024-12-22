@@ -11,9 +11,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.common.config.Java16RecordConfigProperties;
 import com.guan.learning.common.config.MockConfigProperties;
 import com.guan.learning.common.constant.BaseConstants;
-import com.guan.learning.excel.dto.UserDto;
+import com.guan.learning.excel.dto.BaseUserDto;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
-import com.guan.learning.mybatisplus.pojo.User;
+import com.guan.learning.mybatisplus.pojo.BaseUser;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -57,12 +57,12 @@ public class ExcelController {
             return userMapper.
                     selectList(Wrappers.emptyWrapper()).
                     stream().
-                    map(UserDto::userToUserDto).
+                    map(BaseUserDto::userToUserDto).
                     collect(Collectors.toList());
         }
         return IntStream.
                 range(1000, RandomUtil.randomInt(5000, 100000)).
-                mapToObj(i -> UserDto.userToUserDto(User.generateRandomUserFullField())).
+                mapToObj(i -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                 collect(Collectors.toList());
     };
 
@@ -74,7 +74,7 @@ public class ExcelController {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         setResponseInfo();
         try {
-            EasyExcel.write(response.getOutputStream(), UserDto.class)
+            EasyExcel.write(response.getOutputStream(), BaseUserDto.class)
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                     .sheet("模板")
                     .doWrite(allSupplier);
@@ -86,7 +86,7 @@ public class ExcelController {
     @GetMapping("/export/multi/sheet")
     public void exportMultiSheet() {
         setResponseInfo();
-        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), UserDto.class).build()) {
+        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
             for (int i = 0; i < 5; i++) {
                 // 这里注意 如果同一个sheet只要创建一次
                 WriteSheet writeSheet = EasyExcel.writerSheet("data" + i).build();
@@ -94,11 +94,11 @@ public class ExcelController {
                 excelWriter.write(() -> {
                     if (userMapper != null) {
                         return userMapper.selectList(Page.of(current, 5000, false),
-                                Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList());
+                                Wrappers.emptyWrapper()).stream().map(BaseUserDto::userToUserDto).collect(Collectors.toList());
                     }
                     return IntStream.
                             range(1000, RandomUtil.randomInt(5000, 100000)).
-                            mapToObj(ran -> UserDto.userToUserDto(User.generateRandomUserFullField())).
+                            mapToObj(ran -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                             collect(Collectors.toList());
                 }, writeSheet);
             }
@@ -115,7 +115,7 @@ public class ExcelController {
     @SuppressWarnings("unchecked")
     public void exportMultiSheetThread() {
         setResponseInfo();
-        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), UserDto.class).build()) {
+        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
             int count = RandomUtil.randomInt(4, 7);
             CompletableFuture<Void>[] arrays = new CompletableFuture[count];
             for (int i = 0; i < count; i++) {
@@ -125,11 +125,11 @@ public class ExcelController {
                     excelWriter.write(() -> {
                         if (userMapper != null) {
                             return userMapper.selectList(Page.of(finalI, 5000, false),
-                                    Wrappers.emptyWrapper()).stream().map(UserDto::userToUserDto).collect(Collectors.toList());
+                                    Wrappers.emptyWrapper()).stream().map(BaseUserDto::userToUserDto).collect(Collectors.toList());
                         }
                         return IntStream.
                                 range(1000, RandomUtil.randomInt(5000, 100000)).
-                                mapToObj(ran -> UserDto.userToUserDto(User.generateRandomUserFullField())).
+                                mapToObj(ran -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                                 collect(Collectors.toList());
                     }, writeSheet);
                 }, BaseConstants.EXECUTOR_SERVICE);

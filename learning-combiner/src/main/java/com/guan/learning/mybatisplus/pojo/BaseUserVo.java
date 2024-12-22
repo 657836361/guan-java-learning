@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Getter
 @Setter
-public class UserVo {
+public class BaseUserVo {
 
     private String bizId;
 
@@ -28,8 +28,8 @@ public class UserVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
-    public static UserVo newInstance(User user) {
-        UserVo userVo = new UserVo();
+    public static BaseUserVo newInstance(BaseUser user) {
+        BaseUserVo userVo = new BaseUserVo();
         userVo.setBizId(user.getBizId());
         userVo.setName(user.getName());
         userVo.setAge(user.getAge());

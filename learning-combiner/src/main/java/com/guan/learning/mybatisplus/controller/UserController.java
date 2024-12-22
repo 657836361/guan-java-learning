@@ -10,9 +10,9 @@ import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
 import com.guan.learning.dynamic.context.DataSourceContext;
 import com.guan.learning.mybatisplus.mapper.UserMapper;
-import com.guan.learning.mybatisplus.pojo.User;
-import com.guan.learning.mybatisplus.pojo.UserRequest;
-import com.guan.learning.mybatisplus.pojo.UserVo;
+import com.guan.learning.mybatisplus.pojo.BaseUser;
+import com.guan.learning.mybatisplus.pojo.BaseUserRequest;
+import com.guan.learning.mybatisplus.pojo.BaseUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -39,20 +39,20 @@ public class UserController {
     private UserMapper userMapper;
 
     @PostMapping("")
-    public BaseResponse<User> insert() {
-        User user = User.generateRandomUser();
+    public BaseResponse<BaseUser> insert() {
+        BaseUser user = BaseUser.generateRandomUser();
         userMapper.insert(user);
         return CommonResponse.withSuccess(user);
     }
 
     @GetMapping("/{bizId}")
-    public BaseResponse<User> get(@PathVariable String bizId) {
-        return CommonResponse.withSuccess(userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getBizId, bizId)));
+    public BaseResponse<BaseUser> get(@PathVariable String bizId) {
+        return CommonResponse.withSuccess(userMapper.selectOne(Wrappers.<BaseUser>lambdaQuery().eq(BaseUser::getBizId, bizId)));
     }
 
     @DeleteMapping("/{bizId}")
     public BaseResponse<String> delete(@PathVariable String bizId) {
-        userMapper.delete((Wrappers.lambdaUpdate(User.class).eq(User::getBizId, bizId)));
+        userMapper.delete((Wrappers.lambdaUpdate(BaseUser.class).eq(BaseUser::getBizId, bizId)));
         return CommonResponse.withSuccess();
     }
 
@@ -63,8 +63,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/all")
-    public BaseResponse<List<User>> getAll() {
-        List<User> users = userMapper.selectList(new QueryWrapper<>());
+    public BaseResponse<List<BaseUser>> getAll() {
+        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
         return CommonResponse.withSuccess(users);
     }
 
@@ -79,7 +79,7 @@ public class UserController {
         userMapper.selectList(Wrappers.emptyWrapper(),
                 resultContext -> {
                     log.info("开始处理第{}条数据", resultContext.getResultCount());
-                    UserVo.newInstance(resultContext.getResultObject());
+                    BaseUserVo.newInstance(resultContext.getResultObject());
                 });
         return CommonResponse.withSuccess();
     }
@@ -96,52 +96,52 @@ public class UserController {
                 Wrappers.emptyWrapper(),
                 resultContext -> {
                     log.info("开始处理第{}条数据", resultContext.getResultCount());
-                    UserVo.newInstance(resultContext.getResultObject());
+                    BaseUserVo.newInstance(resultContext.getResultObject());
                 });
         return CommonResponse.withSuccess();
     }
 
     @GetMapping("/page")
-    public BaseResponse<IPage<User>> page(UserRequest userRequest) {
-        IPage<User> userIPage = userMapper.selectPage(
+    public BaseResponse<IPage<BaseUser>> page(BaseUserRequest userRequest) {
+        IPage<BaseUser> userIPage = userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
-                Wrappers.lambdaQuery(User.class).
-                        eq(StrUtil.isNotEmpty(userRequest.getName()), User::getName, userRequest.getName()).
+                Wrappers.lambdaQuery(BaseUser.class).
+                        eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
                         between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
-                                User::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
-                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), User::getEmail, userRequest.getEmail()).
-                        eq(StrUtil.isNotEmpty(userRequest.getGender()), User::getGender, userRequest.getGender()).
-                        eq(userRequest.getRole() != null, User::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
+                                BaseUser::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
+                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
+                        eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
+                        eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
         return CommonResponse.withSuccess(userIPage);
     }
 
     @GetMapping("/page/default")
-    public BaseResponse<IPage<User>> pageDefault(UserRequest userRequest) {
-        IPage<User> userIPage = userMapper.selectPage(
+    public BaseResponse<IPage<BaseUser>> pageDefault(BaseUserRequest userRequest) {
+        IPage<BaseUser> userIPage = userMapper.selectPage(
                 Page.of(Optional.ofNullable(userRequest.getPageNo()).orElse(1), Optional.ofNullable(userRequest.getPageSize()).orElse(20)),
-                Wrappers.lambdaQuery(User.class).
-                        eq(StrUtil.isNotEmpty(userRequest.getName()), User::getName, userRequest.getName()).
+                Wrappers.lambdaQuery(BaseUser.class).
+                        eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
                         between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
-                                User::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
-                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), User::getEmail, userRequest.getEmail()).
-                        eq(StrUtil.isNotEmpty(userRequest.getGender()), User::getGender, userRequest.getGender()).
-                        eq(userRequest.getRole() != null, User::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
+                                BaseUser::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
+                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
+                        eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
+                        eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
         return CommonResponse.withSuccess(userIPage);
     }
 
     @GetMapping("/datasource/{datasourceName}")
-    public BaseResponse<List<User>> getMasterData(@PathVariable("datasourceName") String datasourceName) {
+    public BaseResponse<List<BaseUser>> getMasterData(@PathVariable("datasourceName") String datasourceName) {
         DataSourceContext.setDataSource(datasourceName);
-        List<User> users = userMapper.selectList(new QueryWrapper<>());
+        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
         DataSourceContext.removeDataSource();
         return CommonResponse.withSuccess(users);
     }
 
     @GetMapping("/datasource/annoWay")
-    public BaseResponse<List<User>> annoWay() {
-        List<User> users = userMapper.selectList(new QueryWrapper<>());
+    public BaseResponse<List<BaseUser>> annoWay() {
+        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
         return CommonResponse.withSuccess(users);
     }
 }

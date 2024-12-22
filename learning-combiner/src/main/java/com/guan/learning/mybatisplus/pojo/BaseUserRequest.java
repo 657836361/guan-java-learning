@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserRequest extends PageRequest {
+public class BaseUserRequest extends PageRequest {
     private String name;
     private Integer startAge;
     private Integer endAge;

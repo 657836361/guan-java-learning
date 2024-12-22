@@ -15,8 +15,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName(value = "`user`", autoResultMap = true)
-public class User extends BaseDeletedModel {
+@TableName(value = "`base_user`", autoResultMap = true)
+public class BaseUser extends BaseDeletedModel {
     private String name;
     private Integer age;
     private String email;
@@ -25,8 +25,8 @@ public class User extends BaseDeletedModel {
     @TableField(typeHandler = BaseEnumTypeHandler.class)
     private SysRoleEnum role;
 
-    public static User generateRandomUser() {
-        User user = new User();
+    public static BaseUser generateRandomUser() {
+        BaseUser user = new BaseUser();
         user.setAge(RandomUtil.randomInt(0, 99));
         StringBuilder name = new StringBuilder();
         int randomInt = RandomUtil.randomInt(2, 6);
@@ -45,8 +45,8 @@ public class User extends BaseDeletedModel {
         return user;
     }
 
-    public static User generateRandomUserFullField() {
-        User user = generateRandomUser();
+    public static BaseUser generateRandomUserFullField() {
+        BaseUser user = generateRandomUser();
         user.setId(IdWorker.getId());
         BaseSysDictDataVo gender = user.getGender();
         if (gender.getDictDataCode().equals("female")) {

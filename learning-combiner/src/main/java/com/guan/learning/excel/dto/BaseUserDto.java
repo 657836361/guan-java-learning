@@ -5,7 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.guan.learning.common.enums.SysRoleEnum;
 import com.guan.learning.dict.model.BaseSysDictDataVo;
-import com.guan.learning.mybatisplus.pojo.User;
+import com.guan.learning.mybatisplus.pojo.BaseUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Getter
 @Setter
-public class UserDto {
+public class BaseUserDto {
 
 
     @ExcelProperty(value = "姓名", index = 0)
@@ -54,8 +54,8 @@ public class UserDto {
     @ExcelIgnore
     private String ignore;
 
-    public static UserDto userToUserDto(User user) {
-        UserDto userDto = new UserDto();
+    public static BaseUserDto userToUserDto(BaseUser user) {
+        BaseUserDto userDto = new BaseUserDto();
         userDto.setName(user.getName());
         userDto.setAge(user.getAge());
         userDto.setEmail(user.getEmail());
