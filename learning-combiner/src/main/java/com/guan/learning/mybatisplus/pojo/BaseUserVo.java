@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.guan.learning.common.bean.SensitiveDataSerializer;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.dict.model.BaseSysDictDataVo;
+import com.guan.learning.common.pojo.BaseDictModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +34,7 @@ public class BaseUserVo {
         userVo.setName(user.getName());
         userVo.setAge(user.getAge());
         userVo.setEmail(user.getEmail());
-        userVo.setGender(Optional.ofNullable(user.getGender()).map(BaseSysDictDataVo::getDictDataName).orElse(null));
+        userVo.setGender(Optional.ofNullable(user.getGender()).map(BaseDictModel::getDictDataName).orElse(null));
         userVo.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getDesc).orElse(null));
         userVo.setGmtCreate(user.getGmtCreate());
         return userVo;

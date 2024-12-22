@@ -1,7 +1,7 @@
 package com.guan.learning.dict;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.guan.learning.dict.model.BaseSysDictDataVo;
+import com.guan.learning.common.pojo.BaseDictModel;
 import com.guan.learning.dict.model.SysDictData;
 import com.guan.learning.dict.util.DictCacheUtil;
 import org.apache.ibatis.type.JdbcType;
@@ -12,34 +12,34 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DictDataTypeHandler implements TypeHandler<BaseSysDictDataVo> {
+public class DictDataTypeHandler implements TypeHandler<BaseDictModel> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, BaseSysDictDataVo parameter, JdbcType jdbcType) throws SQLException {
+    public void setParameter(PreparedStatement ps, int i, BaseDictModel parameter, JdbcType jdbcType) throws SQLException {
         ps.setString(i, parameter.getDictDataCode());
     }
 
     @Override
-    public BaseSysDictDataVo getResult(ResultSet rs, String columnName) throws SQLException {
+    public BaseDictModel getResult(ResultSet rs, String columnName) throws SQLException {
         String str = rs.getString(columnName);
         return StringUtils.isBlank(str) ? null : this.parse(str);
     }
 
     @Override
-    public BaseSysDictDataVo getResult(ResultSet rs, int columnIndex) throws SQLException {
+    public BaseDictModel getResult(ResultSet rs, int columnIndex) throws SQLException {
         String str = rs.getString(columnIndex);
         return StringUtils.isBlank(str) ? null : this.parse(str);
     }
 
     @Override
-    public BaseSysDictDataVo getResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public BaseDictModel getResult(CallableStatement cs, int columnIndex) throws SQLException {
         String str = cs.getString(columnIndex);
         return StringUtils.isBlank(str) ? null : this.parse(str);
     }
 
-    private BaseSysDictDataVo parse(String dataCode) {
+    private BaseDictModel parse(String dataCode) {
         SysDictData dictData = DictCacheUtil.get(dataCode);
         if (dictData != null) {
-            BaseSysDictDataVo result = new BaseSysDictDataVo();
+            BaseDictModel result = new BaseDictModel();
             result.setDictDataName(dictData.getDictDataName());
             result.setDictDataCode(dictData.getDictDataCode());
             result.setDictTypeName(dictData.getDictTypeName());
@@ -48,6 +48,5 @@ public class DictDataTypeHandler implements TypeHandler<BaseSysDictDataVo> {
         }
         return null;
     }
-
 
 }

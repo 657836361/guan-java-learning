@@ -7,21 +7,21 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.guan.learning.common.enums.BaseEnumTypeHandler;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.BaseDeletedModel;
+import com.guan.learning.common.pojo.BaseDictModel;
+import com.guan.learning.common.pojo.BaseIdBizIdCreateUpdateDeleletedModel;
 import com.guan.learning.dict.DictDataTypeHandler;
-import com.guan.learning.dict.model.BaseSysDictDataVo;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @TableName(value = "`base_user`", autoResultMap = true)
-public class BaseUser extends BaseDeletedModel {
+public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
     private String name;
     private Integer age;
     private String email;
     @TableField(typeHandler = DictDataTypeHandler.class)
-    private BaseSysDictDataVo gender;
+    private BaseDictModel gender;
     @TableField(typeHandler = BaseEnumTypeHandler.class)
     private SysRoleEnum role;
 
@@ -38,7 +38,7 @@ public class BaseUser extends BaseDeletedModel {
                 "@" +
                 RandomUtil.randomString(RandomUtil.randomInt(2, 5)) +
                 ".com" + (RandomUtil.randomBoolean() ? ".cn" : ""));
-        BaseSysDictDataVo gender = new BaseSysDictDataVo();
+        BaseDictModel gender = new BaseDictModel();
         gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
         user.setGender(gender);
         user.setRole(RandomUtil.randomBoolean() ? SysRoleEnum.USER : SysRoleEnum.ADMIN);
@@ -48,7 +48,7 @@ public class BaseUser extends BaseDeletedModel {
     public static BaseUser generateRandomUserFullField() {
         BaseUser user = generateRandomUser();
         user.setId(IdWorker.getId());
-        BaseSysDictDataVo gender = user.getGender();
+        BaseDictModel gender = user.getGender();
         if (gender.getDictDataCode().equals("female")) {
             gender.setDictDataName("女");
         } else {

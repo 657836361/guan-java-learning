@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.dict.model.BaseSysDictDataVo;
+import com.guan.learning.common.pojo.BaseDictModel;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +59,7 @@ public class BaseUserDto {
         userDto.setName(user.getName());
         userDto.setAge(user.getAge());
         userDto.setEmail(user.getEmail());
-        userDto.setGender(Optional.ofNullable(user.getGender()).map(BaseSysDictDataVo::getDictDataName).orElse(null));
+        userDto.setGender(Optional.ofNullable(user.getGender()).map(BaseDictModel::getDictDataName).orElse(null));
         userDto.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getDesc).orElse(null));
         userDto.setGmtCreate(user.getGmtCreate());
         userDto.setGmtModify(user.getGmtModify());

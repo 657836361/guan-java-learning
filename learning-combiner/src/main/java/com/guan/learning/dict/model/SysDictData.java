@@ -1,7 +1,7 @@
 package com.guan.learning.dict.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.guan.learning.common.pojo.BaseWithoutBizIdModel;
+import com.guan.learning.common.pojo.BaseIdCreateUpdateModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_dict_data")
-public class SysDictData extends BaseWithoutBizIdModel {
+public class SysDictData extends BaseIdCreateUpdateModel {
     /**
      * 字典数据code
      */
