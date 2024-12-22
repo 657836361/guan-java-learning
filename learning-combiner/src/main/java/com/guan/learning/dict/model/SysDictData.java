@@ -5,7 +5,9 @@ import com.guan.learning.common.pojo.BaseIdCreateUpdateModel;
 import lombok.Getter;
 import lombok.Setter;
 
-
+/**
+ * @see com.guan.learning.common.pojo.BaseDictModel
+ */
 @Getter
 @Setter
 @TableName("sys_dict_data")
