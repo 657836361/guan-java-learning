@@ -1,4 +1,4 @@
-package com.guan.learning.common.pojo;
+package com.guan.learning.dict.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -21,11 +21,6 @@
     <dependencies>
         <dependency>
             <groupId>com.guan.learning</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.guan.learning</groupId>
             <artifactId>datasource-config-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -34,12 +29,6 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-cache</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>

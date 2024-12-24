@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.guan.learning.common.bean.SensitiveDataSerializer;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.BaseDictModel;
+import com.guan.learning.dict.model.BaseDictModel;
 import lombok.Getter;
 import lombok.Setter;
 

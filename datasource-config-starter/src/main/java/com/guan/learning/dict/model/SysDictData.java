@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @see com.guan.learning.common.pojo.BaseDictModel
+ * @see com.guan.learning.dict.model.BaseDictModel
  */
 @Getter
 @Setter

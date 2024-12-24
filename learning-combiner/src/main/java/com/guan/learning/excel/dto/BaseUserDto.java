@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.BaseDictModel;
+import com.guan.learning.dict.model.BaseDictModel;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import lombok.Getter;
 import lombok.Setter;

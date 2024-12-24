@@ -12,9 +12,14 @@ import java.util.Optional;
 public class DateSourceImportSelector implements ImportSelector {
 
     public static final String DEFAULT_ADVICE_MODE_ATTRIBUTE_NAME = "mode";
-
-    private static final String DYNAMIC_DATA_SOURCE_CONFIG = "com.guan.learning.dynamic.config.DynamicDateSourceConfig";
-    private static final String NORMAL_DATA_SOURCE_CONFIG = "com.guan.learning.normal.config.NormalDataSourceConfig";
+    public static final String MUST_1 = "com.guan.learning.common.AutoFillingMetaObjectHandler";
+    public static final String MUST_2 = "com.guan.learning.common.MybatisPlusConfig";
+    public static final String MUST_3 = "com.guan.learning.common.MapperScanConfig";
+    public static final String MUST_4 = "com.guan.learning.dict.util.DictCacheUtil";
+    public static final String DYNAMIC_MUST = "com.guan.learning.dynamic.config.DynamicDateSourceConfig";
+    public static final String NORMAL_MUST = "com.guan.learning.normal.config.NormalDataSourceConfig";
+    private static final String[] DYNAMIC_DATA_SOURCE_CONFIG_ARRAY = {DYNAMIC_MUST, MUST_1, MUST_2, MUST_3, MUST_4};
+    private static final String[] NORMAL_DATA_SOURCE_CONFIG_ARRAY = {NORMAL_MUST, MUST_1, MUST_2, MUST_3, MUST_4};
 
     /**
      * 获取@EnableDataSource注解
@@ -25,17 +30,18 @@ public class DateSourceImportSelector implements ImportSelector {
      */
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+        //        EnableDataSource enableDataSource = AnnotationUtils.findAnnotation(LearningCombinerApplication.class, EnableDataSource.class);
         MergedAnnotations mergedAnnotations = importingClassMetadata.getAnnotations();
         MergedAnnotation<EnableDataSource> mergedAnnotation = mergedAnnotations.get(EnableDataSource.class);
         Optional<DataSourceMode> dataSourceMode = mergedAnnotation.getValue(DEFAULT_ADVICE_MODE_ATTRIBUTE_NAME, DataSourceMode.class);
 
         return dataSourceMode.map(mode -> {
             if (mode.equals(DataSourceMode.DYNAMIC)) {
-                return new String[]{DYNAMIC_DATA_SOURCE_CONFIG};
+                return DYNAMIC_DATA_SOURCE_CONFIG_ARRAY;
             } else {
-                return new String[]{NORMAL_DATA_SOURCE_CONFIG};
+                return NORMAL_DATA_SOURCE_CONFIG_ARRAY;
             }
         }).orElse(new String[]{});
-
     }
+
 }

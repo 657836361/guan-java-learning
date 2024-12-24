@@ -1,7 +1,7 @@
 package com.guan.learning.dict;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.guan.learning.common.pojo.BaseDictModel;
+import com.guan.learning.dict.model.BaseDictModel;
 import com.guan.learning.dict.model.SysDictData;
 import com.guan.learning.dict.util.DictCacheUtil;
 import org.apache.ibatis.type.JdbcType;
