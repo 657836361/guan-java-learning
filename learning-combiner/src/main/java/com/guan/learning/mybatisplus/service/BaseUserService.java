@@ -1,4 +1,4 @@
-package com.guan.learning.mybatisplus.controller;
+package com.guan.learning.mybatisplus.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -6,54 +6,55 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.response.BaseResponse;
-import com.guan.learning.common.pojo.response.CommonResponse;
-import com.guan.learning.dynamic.context.DataSourceContext;
-import com.guan.learning.mybatisplus.mapper.UserMapper;
+import com.guan.learning.common.enums.response.CommonErrorResponseEnum;
+import com.guan.learning.common.exceptions.BusinessException;
+import com.guan.learning.mybatisplus.mapper.BaseUserMapper;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import com.guan.learning.mybatisplus.pojo.BaseUserRequest;
 import com.guan.learning.mybatisplus.pojo.BaseUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+@Service
 @Slf4j
-@RestController
-@RequestMapping("/user")
-@Validated
-@ConditionalOnBean(DataSource.class)
-public class UserController {
+public class BaseUserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private static final List<BaseUser> LIST = new CopyOnWriteArrayList<>();
 
-    @PostMapping("")
-    public BaseResponse<BaseUser> insert() {
+    @Autowired(required = false)
+    private BaseUserMapper userMapper;
+
+    public BaseUser insert() {
         BaseUser user = BaseUser.generateRandomUser();
-        userMapper.insert(user);
-        return CommonResponse.withSuccess(user);
+        if (userMapper != null) {
+            userMapper.insert(user);
+        } else {
+            user = BaseUser.generateRandomUser(user);
+            LIST.add(user);
+        }
+        return user;
     }
 
-    @GetMapping("/{bizId}")
-    public BaseResponse<BaseUser> get(@PathVariable String bizId) {
-        return CommonResponse.withSuccess(userMapper.selectOne(Wrappers.<BaseUser>lambdaQuery().eq(BaseUser::getBizId, bizId)));
+    public BaseUser get(String bizId) {
+        if (userMapper != null) {
+            return userMapper.selectOne(Wrappers.<BaseUser>lambdaQuery().eq(BaseUser::getBizId, bizId));
+        }
+        return LIST.stream().filter(user -> Objects.equals(user.getBizId(), bizId)).findFirst().orElse(null);
     }
 
-    @DeleteMapping("/{bizId}")
-    public BaseResponse<String> delete(@PathVariable String bizId) {
-        userMapper.delete((Wrappers.lambdaUpdate(BaseUser.class).eq(BaseUser::getBizId, bizId)));
-        return CommonResponse.withSuccess();
+
+    public int delete(String bizId) {
+        if (userMapper != null) {
+            return userMapper.delete((Wrappers.lambdaUpdate(BaseUser.class).eq(BaseUser::getBizId, bizId)));
+        } else {
+            return LIST.removeIf(user -> Objects.equals(user.getBizId(), bizId)) ? 1 : 0;
+        }
     }
 
     /**
@@ -62,10 +63,11 @@ public class UserController {
      *
      * @return
      */
-    @GetMapping("/all")
-    public BaseResponse<List<BaseUser>> getAll() {
-        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
-        return CommonResponse.withSuccess(users);
+    public List<BaseUser> getAll() {
+        if (userMapper != null) {
+            return userMapper.selectList(new QueryWrapper<>());
+        }
+        return LIST;
     }
 
     /**
@@ -74,14 +76,15 @@ public class UserController {
      * @return
      * @since 3.5.4
      */
-    @GetMapping("/all/stream")
-    public BaseResponse<Void> getAllStream() {
+    public void getAllStream() {
+        if (userMapper == null) {
+            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+        }
         userMapper.selectList(Wrappers.emptyWrapper(),
                 resultContext -> {
                     log.info("开始处理第{}条数据", resultContext.getResultCount());
                     BaseUserVo.newInstance(resultContext.getResultObject());
                 });
-        return CommonResponse.withSuccess();
     }
 
     /**
@@ -90,20 +93,24 @@ public class UserController {
      * @return
      * @since 3.5.4
      */
-    @GetMapping("/page/stream")
-    public BaseResponse<Void> pageStream() {
+    public void pageStream() {
+        if (userMapper == null) {
+            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+        }
         userMapper.selectList(Page.of(1, 10000),
                 Wrappers.emptyWrapper(),
                 resultContext -> {
                     log.info("开始处理第{}条数据", resultContext.getResultCount());
                     BaseUserVo.newInstance(resultContext.getResultObject());
                 });
-        return CommonResponse.withSuccess();
     }
 
-    @GetMapping("/page")
-    public BaseResponse<IPage<BaseUser>> page(BaseUserRequest userRequest) {
-        IPage<BaseUser> userIPage = userMapper.selectPage(
+    public IPage<BaseUser> page(BaseUserRequest userRequest) {
+        if (userMapper == null) {
+            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+        }
+        // todo 我需要把page的逻辑提取到过滤器或者拦截器中 且存到threadlocal里面
+        return userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
                 Wrappers.lambdaQuery(BaseUser.class).
                         eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
@@ -113,12 +120,13 @@ public class UserController {
                         eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
                         eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
-        return CommonResponse.withSuccess(userIPage);
     }
 
-    @GetMapping("/page/default")
-    public BaseResponse<IPage<BaseUser>> pageDefault(BaseUserRequest userRequest) {
-        IPage<BaseUser> userIPage = userMapper.selectPage(
+    public IPage<BaseUser> pageDefault(BaseUserRequest userRequest) {
+        if (userMapper == null) {
+            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+        }
+        return userMapper.selectPage(
                 Page.of(Optional.ofNullable(userRequest.getPageNo()).orElse(1), Optional.ofNullable(userRequest.getPageSize()).orElse(20)),
                 Wrappers.lambdaQuery(BaseUser.class).
                         eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
@@ -128,20 +136,5 @@ public class UserController {
                         eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
                         eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
-        return CommonResponse.withSuccess(userIPage);
-    }
-
-    @GetMapping("/datasource/{datasourceName}")
-    public BaseResponse<List<BaseUser>> getMasterData(@PathVariable("datasourceName") String datasourceName) {
-        DataSourceContext.setDataSource(datasourceName);
-        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
-        DataSourceContext.removeDataSource();
-        return CommonResponse.withSuccess(users);
-    }
-
-    @GetMapping("/datasource/annoWay")
-    public BaseResponse<List<BaseUser>> annoWay() {
-        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
-        return CommonResponse.withSuccess(users);
     }
 }

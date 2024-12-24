@@ -12,7 +12,7 @@ import com.guan.learning.common.config.Java16RecordConfigProperties;
 import com.guan.learning.common.config.MockConfigProperties;
 import com.guan.learning.common.constant.BaseConstants;
 import com.guan.learning.excel.dto.BaseUserDto;
-import com.guan.learning.mybatisplus.mapper.UserMapper;
+import com.guan.learning.mybatisplus.mapper.BaseUserMapper;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -44,8 +44,11 @@ public class ExcelController {
     private HttpServletResponse response;
 
     @Autowired(required = false)
-    private UserMapper userMapper;
+    private BaseUserMapper userMapper;
 
+    /**
+     * 这里只是单纯为了展示property是否生效了
+     */
     @PostConstruct
     public void init() {
         log.info(mockConfigProperties.toString());

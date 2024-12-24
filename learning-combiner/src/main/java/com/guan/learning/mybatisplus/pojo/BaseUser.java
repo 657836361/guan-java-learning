@@ -13,6 +13,8 @@ import com.guan.learning.dict.DictDataTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @TableName(value = "`base_user`", autoResultMap = true)
@@ -45,6 +47,21 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
         return user;
     }
 
+    public static BaseUser generateRandomUser(BaseUser user) {
+        user.setId(IdWorker.getId());
+        BaseDictModel gender = user.getGender();
+        if (gender.getDictDataCode().equals("female")) {
+            gender.setDictDataName("女");
+        } else {
+            gender.setDictDataName("男");
+        }
+        user.setCreateUser("generate");
+        user.setGmtCreate(DateUtil.date());
+        user.setModifyUser("generate");
+        user.setGmtModify(DateUtil.date());
+        return user;
+    }
+
     public static BaseUser generateRandomUserFullField() {
         BaseUser user = generateRandomUser();
         user.setId(IdWorker.getId());
@@ -59,5 +76,18 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
         user.setModifyUser("generate");
         user.setGmtModify(DateUtil.date());
         return user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseUser baseUser = (BaseUser) o;
+        return Objects.equals(getBizId(), baseUser.getBizId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBizId());
     }
 }

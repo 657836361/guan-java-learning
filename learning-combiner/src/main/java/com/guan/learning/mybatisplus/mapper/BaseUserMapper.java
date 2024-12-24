@@ -5,5 +5,5 @@ import com.guan.learning.mybatisplus.pojo.BaseUser;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface UserMapper extends BaseMapper<BaseUser> {
+public interface BaseUserMapper extends BaseMapper<BaseUser> {
 }
