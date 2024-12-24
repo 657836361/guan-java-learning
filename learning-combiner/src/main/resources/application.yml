@@ -1,6 +1,7 @@
 server:
   port: 8080
-  context-path: /learning
+  servlet:
+    context-path: /learning
   tomcat:
     uri-encoding: UTF-8
     max-threads: 800 #最大工作线程数量
