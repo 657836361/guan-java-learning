@@ -3,14 +3,14 @@ package com.guan.learning.common.bean;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * SpringBoot：使用Jackson完成全局序列化配置
  * 序列化枚举值为前端返回值
  * Jackson 重写 toString 方法
+ * 不使用该配置  使用配置文件替代
  */
-@Configuration
+//@Configuration
 public class EnumJacksonCustomizer {
 
     @Bean
