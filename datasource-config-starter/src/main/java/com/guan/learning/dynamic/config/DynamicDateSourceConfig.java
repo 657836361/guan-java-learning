@@ -1,6 +1,7 @@
 package com.guan.learning.dynamic.config;
 
 import com.guan.learning.dynamic.DynamicDataSource;
+import com.guan.learning.dynamic.enums.DataSourceEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,8 +34,8 @@ public class DynamicDateSourceConfig {
                                                      @Qualifier("slaveDataSource") DataSource slaveDataSource) {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         Map<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put("master", masterDataSource);
-        dataSourceMap.put("slave", slaveDataSource);
+        dataSourceMap.put(DataSourceEnum.MASTER, masterDataSource);
+        dataSourceMap.put(DataSourceEnum.SLAVE, slaveDataSource);
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
         log.info("DynamicDateSource created");

@@ -1,10 +1,12 @@
 package com.guan.learning.dynamic.context;
 
+import com.guan.learning.dynamic.enums.DataSourceEnum;
+
 /**
  * 此类提供线程局部变量。这些变量不同于它们的正常对应关系是每个线程访问一个线程(通过get、set方法),有自己的独立初始化变量的副本。
  */
 public class DataSourceContext {
-    private static final ThreadLocal<String> DATASOURCE_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<DataSourceEnum> DATASOURCE_HOLDER = new ThreadLocal<>();
 
     /**
      * 设置数据源
@@ -12,7 +14,7 @@ public class DataSourceContext {
      * @param dataSourceName 数据源名称
      */
     public static void setDataSource(String dataSourceName) {
-        DATASOURCE_HOLDER.set(dataSourceName);
+        DATASOURCE_HOLDER.set(DataSourceEnum.getEnumByName(dataSourceName));
     }
 
     /**
@@ -20,7 +22,7 @@ public class DataSourceContext {
      *
      * @return 数据源名称
      */
-    public static String getDataSource() {
+    public static DataSourceEnum getDataSource() {
         return DATASOURCE_HOLDER.get();
     }
 
