@@ -91,19 +91,4 @@ public class BaseUserController {
     public BaseResponse<IPage<BaseUser>> pageDefault(BaseUserRequest userRequest) {
         return CommonResponse.withSuccess(service.pageDefault(userRequest));
     }
-// todo 这两个接口需要继续修改
-
-//    @GetMapping("/datasource/{datasourceName}")
-//    public BaseResponse<List<BaseUser>> getMasterData(@PathVariable("datasourceName") String datasourceName) {
-//        DataSourceContext.setDataSource(datasourceName);
-//        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
-//        DataSourceContext.removeDataSource();
-//        return CommonResponse.withSuccess(users);
-//    }
-//
-//    @GetMapping("/datasource/annoWay")
-//    public BaseResponse<List<BaseUser>> annoWay() {
-//        List<BaseUser> users = userMapper.selectList(new QueryWrapper<>());
-//        return CommonResponse.withSuccess(users);
-//    }
 }

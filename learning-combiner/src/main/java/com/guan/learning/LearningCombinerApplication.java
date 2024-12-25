@@ -12,7 +12,7 @@ import org.springframework.context.annotation.FilterType;
 /**
  * @see EnableDataSource
  */
-@EnableDataSource(mode = DataSourceMode.NORMAL)
+@EnableDataSource(mode = DataSourceMode.DYNAMIC)
 @ConfigurationPropertiesScan
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 // 两种都行
