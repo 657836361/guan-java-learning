@@ -34,6 +34,16 @@
     </dependencies>
 
     <build>
+        <!-- 打包时过滤掉目录下的任意层级的所有文件和子目录-->
+        <!--        打包时当前版本会自动过滤非java文件-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
