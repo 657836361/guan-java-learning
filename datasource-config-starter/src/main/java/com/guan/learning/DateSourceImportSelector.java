@@ -16,10 +16,11 @@ public class DateSourceImportSelector implements ImportSelector {
     public static final String MUST_2 = "com.guan.learning.common.MybatisPlusConfig";
     public static final String MUST_3 = "com.guan.learning.common.MapperScanConfig";
     public static final String MUST_4 = "com.guan.learning.dict.util.DictCacheUtil";
+    public static final String MUST_5 = "com.guan.learning.dynamic.config.DynamicDataSourceMybatisExecutorInterceptor";
     public static final String DYNAMIC_MUST = "com.guan.learning.dynamic.config.DynamicDateSourceConfig";
     public static final String NORMAL_MUST = "com.guan.learning.normal.config.NormalDataSourceConfig";
-    private static final String[] DYNAMIC_DATA_SOURCE_CONFIG_ARRAY = {DYNAMIC_MUST, MUST_1, MUST_2, MUST_3, MUST_4};
-    private static final String[] NORMAL_DATA_SOURCE_CONFIG_ARRAY = {NORMAL_MUST, MUST_1, MUST_2, MUST_3, MUST_4};
+    private static final String[] DYNAMIC_DATA_SOURCE_CONFIG_ARRAY = {DYNAMIC_MUST, MUST_1, MUST_2, MUST_3, MUST_4, MUST_5};
+    private static final String[] NORMAL_DATA_SOURCE_CONFIG_ARRAY = {NORMAL_MUST, MUST_1, MUST_2, MUST_3, MUST_4, MUST_5};
 
     /**
      * 获取@EnableDataSource注解
