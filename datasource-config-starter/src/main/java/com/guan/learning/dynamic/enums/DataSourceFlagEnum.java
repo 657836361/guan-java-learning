@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum DataSourceEnum {
+public enum DataSourceFlagEnum {
 
     /**
      * 主库
@@ -22,9 +22,9 @@ public enum DataSourceEnum {
 
     private final String name;
 
-    public static DataSourceEnum getEnumByName(String name) throws BusinessException {
-        for (DataSourceEnum anEnum : DataSourceEnum.values()) {
-            if (anEnum.getName().equals(name)) {
+    public static DataSourceFlagEnum getEnumByName(String flag) throws BusinessException {
+        for (DataSourceFlagEnum anEnum : DataSourceFlagEnum.values()) {
+            if (anEnum.getName().equals(flag)) {
                 return anEnum;
             }
         }

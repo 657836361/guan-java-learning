@@ -5,8 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guan.learning.common.pojo.response.BaseResponse;
 import com.guan.learning.common.pojo.response.CommonResponse;
 import com.guan.learning.dynamic.context.DataSourceContext;
-import com.guan.learning.mybatisplus.mapper.DynamivDataSourceSlaveUserMapper;
-import com.guan.learning.mybatisplus.mapper.DynamivDataSourceUserMapper;
+import com.guan.learning.mybatisplus.mapper.BaseUserMapper;
+import com.guan.learning.mybatisplus.mapper.DynamicDataSourceMasterUserMapper;
+import com.guan.learning.mybatisplus.mapper.DynamicDataSourceSlaveUserMapper;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,11 @@ import java.util.List;
 public class SwitchDataSourceController {
 
     @Autowired
-    private DynamivDataSourceSlaveUserMapper dynamivDataSourceSlaveUserMapper;
+    private DynamicDataSourceSlaveUserMapper dynamicDataSourceSlaveUserMapper;
     @Autowired
-    private DynamivDataSourceUserMapper dynamivDataSourceUserMapper;
+    private DynamicDataSourceMasterUserMapper dynamicDataSourceMasterUserMapper;
+    @Autowired
+    private BaseUserMapper baseUserMapper;
 
     /**
      * 只能通过参数控制数据源
@@ -36,24 +39,33 @@ public class SwitchDataSourceController {
     @GetMapping("/datasource")
     public BaseResponse<List<BaseUser>> getMasterData(@RequestParam("datasourceName") String datasourceName) {
         try {
-            DataSourceContext.setDataSource(datasourceName);
-            List<BaseUser> users = dynamivDataSourceUserMapper.
-                    selectList(Page.of(10, 10, false), Wrappers.emptyWrapper());
+            DataSourceContext.set(datasourceName);
+            List<BaseUser> users = baseUserMapper.selectList(Page.of(10, 10, false), Wrappers.emptyWrapper());
             return CommonResponse.withSuccess(users);
         } finally {
-            DataSourceContext.removeDataSource();
+            DataSourceContext.remove();
         }
     }
 
     /**
-     * 通过@DataSourceName 注解 写死了是slave
+     * 通过@DataSourceFlag 注解 写死了是master
      *
      * @return
      */
-    @GetMapping("/datasource/annoWay")
-    public BaseResponse<List<BaseUser>> annoWay() {
-        List<BaseUser> users = dynamivDataSourceUserMapper.
-                selectList(Page.of(10, 10, false), Wrappers.emptyWrapper());
+    @GetMapping("/datasource/annoWay/master")
+    public BaseResponse<List<BaseUser>> master() {
+        List<BaseUser> users = dynamicDataSourceMasterUserMapper.selectList(Page.of(10, 10, false), Wrappers.emptyWrapper());
+        return CommonResponse.withSuccess(users);
+    }
+
+    /**
+     * 通过@DataSourceFlag 注解 写死了是slave
+     *
+     * @return
+     */
+    @GetMapping("/datasource/annoWay/slave")
+    public BaseResponse<List<BaseUser>> slave() {
+        List<BaseUser> users = dynamicDataSourceSlaveUserMapper.selectList(Page.of(10, 10, false), Wrappers.emptyWrapper());
         return CommonResponse.withSuccess(users);
     }
 }

@@ -1,6 +1,6 @@
 package com.guan.learning.dynamic.anno;
 
-import com.guan.learning.dynamic.enums.DataSourceEnum;
+import com.guan.learning.dynamic.enums.DataSourceFlagEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DataSourceName {
+public @interface DataSourceFlag {
 
     /**
-     * 数据源名称
+     * 数据源标志
      */
-    DataSourceEnum dataSourceName();
+    DataSourceFlagEnum flagEnum();
 }
