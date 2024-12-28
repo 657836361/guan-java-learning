@@ -16,9 +16,8 @@ import org.apache.ibatis.session.RowBounds;
 
 
 /**
- * 1.maven打包 过滤某些类路径下的非java文件
+ * 1.maven打包 过滤某些类路径下的非java文件 默认不打包非java
  * 2.mybatis拦截器通过判断是否有注解来判断切换数据源
- * todo 3.验证mybatisplus 或 mybatis的流式调用是否会走拦截器的queryCursor
  */
 @Intercepts({
         @Signature(type = Executor.class, method = "query",
