@@ -109,7 +109,6 @@ public class BaseUserService {
         if (userMapper == null) {
             throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
         }
-        // todo 我需要把page的逻辑提取到过滤器或者拦截器中 且存到threadlocal里面
         return userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
                 Wrappers.lambdaQuery(BaseUser.class).
