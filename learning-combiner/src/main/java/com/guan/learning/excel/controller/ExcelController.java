@@ -1,10 +1,10 @@
 package com.guan.learning.excel.controller;
 
 import cn.hutool.core.util.RandomUtil;
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import cn.idev.excel.ExcelWriter;
+import cn.idev.excel.FastExcel;
+import cn.idev.excel.write.metadata.WriteSheet;
+import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.toolkit.SystemClock;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -77,7 +77,7 @@ public class ExcelController {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         setResponseInfo();
         try {
-            EasyExcel.write(response.getOutputStream(), BaseUserDto.class)
+            FastExcel.write(response.getOutputStream(), BaseUserDto.class)
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                     .sheet("模板")
                     .doWrite(allSupplier);
@@ -89,10 +89,10 @@ public class ExcelController {
     @GetMapping("/export/multi/sheet")
     public void exportMultiSheet() {
         setResponseInfo();
-        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
+        try (ExcelWriter excelWriter = FastExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
             for (int i = 0; i < 5; i++) {
                 // 这里注意 如果同一个sheet只要创建一次
-                WriteSheet writeSheet = EasyExcel.writerSheet("data" + i).build();
+                WriteSheet writeSheet = FastExcel.writerSheet("data" + i).build();
                 int current = i;
                 excelWriter.write(() -> {
                     if (userMapper != null) {
@@ -108,7 +108,6 @@ public class ExcelController {
         } catch (Exception e) {
             log.error("error", e);
         }
-
     }
 
     /**
@@ -118,13 +117,13 @@ public class ExcelController {
     @SuppressWarnings("unchecked")
     public void exportMultiSheetThread() {
         setResponseInfo();
-        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
+        try (ExcelWriter excelWriter = FastExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
             int count = RandomUtil.randomInt(4, 7);
             CompletableFuture<Void>[] arrays = new CompletableFuture[count];
             for (int i = 0; i < count; i++) {
                 int finalI = i;
                 arrays[finalI] = CompletableFuture.runAsync(() -> {
-                    WriteSheet writeSheet = EasyExcel.writerSheet("data" + finalI).build();
+                    WriteSheet writeSheet = FastExcel.writerSheet("data" + finalI).build();
                     excelWriter.write(() -> {
                         if (userMapper != null) {
                             return userMapper.selectList(Page.of(finalI, 5000, false),
@@ -147,7 +146,7 @@ public class ExcelController {
     private void setResponseInfo() {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        // 这里URLEncoder.encode可以防止中文乱码
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" +
                 URLEncoder.encode("测试", StandardCharsets.UTF_8) + SystemClock.nowDate() + ".xlsx");
     }
