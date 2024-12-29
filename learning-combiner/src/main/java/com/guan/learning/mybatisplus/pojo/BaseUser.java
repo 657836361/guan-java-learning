@@ -1,6 +1,7 @@
 package com.guan.learning.mybatisplus.pojo;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -49,6 +50,7 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
 
     public static BaseUser generateRandomUser(BaseUser user) {
         user.setId(IdWorker.getId());
+        user.setBizId(IdUtil.fastSimpleUUID());
         BaseDictModel gender = user.getGender();
         if (gender.getDictDataCode().equals("female")) {
             gender.setDictDataName("女");
