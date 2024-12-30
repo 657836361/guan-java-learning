@@ -93,6 +93,23 @@ public class BaseUserService {
      * @return
      * @since 3.5.4
      */
+    public void getAllStreamAnother() {
+        if (userMapper == null) {
+            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+        }
+        userMapper.customQuery(Wrappers.emptyWrapper(),
+                resultContext -> {
+                    log.info("自定义开始处理第{}条数据", resultContext.getResultCount());
+                    BaseUserVo.newInstance(resultContext.getResultObject());
+                });
+    }
+
+    /**
+     * MyBatis-Plus 从 3.5.4 版本开始支持流式查询
+     *
+     * @return
+     * @since 3.5.4
+     */
     public void pageStream() {
         if (userMapper == null) {
             throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");

@@ -71,6 +71,19 @@ public class BaseUserController {
     }
 
     /**
+     * mysql fetch-size必须是-2147483648才能启动流式查询
+     * 详情请查看https://github.com/baomidou/mybatis-plus/issues/6485
+     *
+     * @return
+     * @since 3.5.4
+     */
+    @GetMapping("/all/stream/another")
+    public BaseResponse<Void> getAllStreamAnother() {
+        service.getAllStreamAnother();
+        return CommonResponse.withSuccess();
+    }
+
+    /**
      * MyBatis-Plus 从 3.5.4 版本开始支持流式查询
      *
      * @return

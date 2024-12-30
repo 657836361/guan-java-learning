@@ -6,6 +6,7 @@ mybatis-plus:
   global-config:
     banner: true
   configuration:
-    # mysql该配置好像失效的
-    default-fetch-size: 100
+    # mysql该配置必须是-2147483648才能启动流式查询
+    # 详情请查看https://github.com/baomidou/mybatis-plus/issues/6485
+    default-fetch-size: -2147483648
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
