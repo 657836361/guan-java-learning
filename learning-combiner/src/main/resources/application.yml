@@ -1,20 +1,29 @@
+# 下面配置请看org.springframework.boot.autoconfigure.web.ServerProperties
 server:
   port: 8080
   servlet:
     context-path: /learning
   tomcat:
     uri-encoding: UTF-8
-    max-threads: 800 #最大工作线程数量
-    min-spare-threads: 20 #最小工作线程数量
-    #max-connections: 10000 #一瞬间最大支持的并发的连接数
-    accept-count: 200 #等待队列长度
+    #一瞬间最大支持的并发的连接数
+    max-connections: 10000
+    #等待队列长度
+    accept-count: 200
     relaxed-Query-Chars:
       - '{'
       - '}'
+    threads:
+      # 最大工作线程数量。如果启用了虚拟线程，则没有效果。 默认值=200
+      max: 300
+      # 最小工作线程数量。如果启用了虚拟线程，则没有效果。 默认值=10
+      min-pare: 15
+      # 线程池支持队列的最大容量。此设置仅在值大于0时有效。 默认值=2147483647
+      max-queue-capacity: 2147483647
   compression:
     enabled: true
     mine-type: application/json
-    min-response-size: 1024
+    # 压缩所需的最小内容大小（以字节为单位）
+    min-response-size: 512
 
 spring:
   application:
