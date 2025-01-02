@@ -78,7 +78,7 @@ public class BaseUserService {
      */
     public void getAllStream() {
         if (userMapper == null) {
-            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+            throw new BusinessException(CommonErrorResponseEnum.DATASOURCE_UNABLE);
         }
         userMapper.selectList(Wrappers.emptyWrapper(),
                 resultContext -> {
@@ -95,7 +95,7 @@ public class BaseUserService {
      */
     public void getAllStreamAnother() {
         if (userMapper == null) {
-            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+            throw new BusinessException(CommonErrorResponseEnum.DATASOURCE_UNABLE);
         }
         userMapper.customQuery(Wrappers.emptyWrapper(),
                 resultContext -> {
@@ -112,7 +112,7 @@ public class BaseUserService {
      */
     public void pageStream() {
         if (userMapper == null) {
-            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+            throw new BusinessException(CommonErrorResponseEnum.DATASOURCE_UNABLE);
         }
         userMapper.selectList(Page.of(1, 10000),
                 Wrappers.emptyWrapper(),
@@ -124,7 +124,7 @@ public class BaseUserService {
 
     public IPage<BaseUser> page(BaseUserRequest userRequest) {
         if (userMapper == null) {
-            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+            throw new BusinessException(CommonErrorResponseEnum.DATASOURCE_UNABLE);
         }
         return userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
@@ -140,7 +140,7 @@ public class BaseUserService {
 
     public IPage<BaseUser> pageDefault(BaseUserRequest userRequest) {
         if (userMapper == null) {
-            throw new BusinessException(CommonErrorResponseEnum.OPTIOPN_ERROR, "数据源未启动 不能操作");
+            throw new BusinessException(CommonErrorResponseEnum.DATASOURCE_UNABLE);
         }
         return userMapper.selectPage(
                 Page.of(Optional.ofNullable(userRequest.getPageNo()).orElse(1), Optional.ofNullable(userRequest.getPageSize()).orElse(20)),

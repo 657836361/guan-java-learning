@@ -36,6 +36,11 @@ public enum CommonErrorResponseEnum implements ErrorResponseEnum {
      */
     JSON_ERROR(1006, "数据无法处理,请检查后再发起请求"),
 
+    /**
+     * 数据源未启动 不能操作
+     */
+    DATASOURCE_UNABLE(1007, "数据源未启动 不能操作"),
+
     ;
 
     /**
