@@ -18,13 +18,15 @@ public interface BaseUserMapper extends BaseMapper<BaseUser> {
     /**
      * mysql fetchSize必须是-2147483648才能启动流式查询
      * 详情请查看https://github.com/baomidou/mybatis-plus/issues/6485
+     * ResultSetType.FORWARD_ONLY 表示游标只向前滚动
+     * fetchSize 每次获取量
+     * useCache 是否使用二级缓存（非session级别） 默认开启 该配置需要与mybatis-configuration useCache联动使用 这时候会走CacheExecutor
      *
      * @param wrapper
      * @param handler
      */
     @Select("select * from base_user t ${ew.customSqlSegment}")
-    // ResultSetType.FORWARD_ONLY 表示游标只向前滚动 fetchSize 每次获取量
-    @Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = Integer.MIN_VALUE)
+    @Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = Integer.MIN_VALUE, useCache = false)
     @ResultType(BaseUser.class)
     void customQuery(@Param(Constants.WRAPPER) QueryWrapper<BaseUser> wrapper, ResultHandler<BaseUser> handler);
 

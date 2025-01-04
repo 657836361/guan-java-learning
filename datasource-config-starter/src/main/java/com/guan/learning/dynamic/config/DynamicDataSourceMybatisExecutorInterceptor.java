@@ -1,6 +1,5 @@
 package com.guan.learning.dynamic.config;
 
-import cn.hutool.core.util.StrUtil;
 import com.guan.learning.dynamic.anno.DataSourceFlag;
 import com.guan.learning.dynamic.context.DataSourceContext;
 import com.guan.learning.dynamic.enums.DataSourceFlagEnum;
@@ -19,9 +18,6 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.util.List;
 
 
 /**
@@ -68,18 +64,12 @@ public class DynamicDataSourceMybatisExecutorInterceptor implements Interceptor 
      * 现在的情况就是 这种方式必须得获取一个链接后才能获取对应数据源信息
      * todo 反射获取动态数据源或数据源
      *
-     * @param ms
+     * @param ms ms
      */
     private void printInfo(MappedStatement ms) {
         Configuration configuration = ms.getConfiguration();
         Environment environment = configuration.getEnvironment();
         DataSource dataSource = environment.getDataSource();
-        try (Connection connection = dataSource.getConnection()) {
-            DatabaseMetaData metaData = connection.getMetaData();
-            List<String> split = StrUtil.split(metaData.getURL(), "?");
-            log.info("当前链接为{}", split.get(0));
-        } catch (Exception e) {
-            // ingore
-        }
+        log.info("当前数据源为{}", dataSource.getClass().getName());
     }
 }
