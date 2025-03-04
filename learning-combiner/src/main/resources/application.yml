@@ -32,21 +32,16 @@ spring:
     active: @env@
   data:
     redis:
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
-          max-wait: -1ms
+      password: ${REDIS_PASSWORD}
+      # 集群模式下 全局连接池配置无效故删除
       cluster:
-        - localhost:7001
-        - localhost:7002
-        - localhost:7003
-        - localhost:7004
-        - localhost:7005
-        - localhost:7006
-        - localhost:7007
-        - localhost:7008
+        nodes:
+          - localhost:7001
+          - localhost:7002
+          - localhost:7003
+          - localhost:7004
+          - localhost:7005
+          - localhost:7006
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
