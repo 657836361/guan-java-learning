@@ -44,4 +44,42 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- 1. 打包 Spring Boot 应用 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 2. Docker 镜像构建插件 -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <!-- 绑定到 Maven 的 package 阶段 -->
+                    <execution>
+                        <id>build-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Dockerfile 路径 -->
+                    <dockerfile>Dockerfile</dockerfile>
+                    <!-- 禁用缓存 -->
+                    <noCache>true</noCache>
+                    <!-- 强制清理中间镜像 -->
+                    <force>true</force>
+                    <!-- 镜像名称和标签 -->
+                    <repository>learning-combiner</repository>
+                    <tag>latest</tag>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

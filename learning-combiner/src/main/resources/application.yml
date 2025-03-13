@@ -35,13 +35,7 @@ spring:
       password: ${REDIS_PASSWORD}
       # 集群模式下 全局连接池配置无效故删除
       cluster:
-        nodes:
-          - localhost:7001
-          - localhost:7002
-          - localhost:7003
-          - localhost:7004
-          - localhost:7005
-          - localhost:7006
+        nodes: ${REDIS_NODES}
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -96,4 +90,7 @@ mock:
     user-id: 646327412
   # sha256后再base64 原'secret-key'
   private-key: hdvhXXXvkwjHrg8zx6MkzG9L9Rmi7S8wJ70zwUCk+ao=
+
+file:
+  path: ${file.path}
 
