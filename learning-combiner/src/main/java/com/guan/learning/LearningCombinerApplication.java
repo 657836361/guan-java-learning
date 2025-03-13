@@ -8,12 +8,14 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @see EnableDataSource
  */
 @EnableAspectJAutoProxy
 //@EnableDataSource(mode = DataSourceMode.DYNAMIC)
+@EnableAsync
 @ConfigurationPropertiesScan
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 // 两种都行

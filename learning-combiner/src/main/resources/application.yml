@@ -32,6 +32,7 @@ spring:
     active: @env@
   data:
     redis:
+      timeout: 1000
       password: ${REDIS_PASSWORD}
       # 集群模式下 全局连接池配置无效故删除
       cluster:
