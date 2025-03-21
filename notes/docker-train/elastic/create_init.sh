@@ -14,4 +14,5 @@ docker run -d --name kib01 \
   --net elastic \
   -p 5601:5601 \
   -v /home/guan/elastic/kibana/data:/usr/share/kibana/data \
+  -v /home/guan/elastic/kibana/data:/usr/share/kibana/data \
   docker.elastic.co/kibana/kibana:8.17.3;

@@ -12,10 +12,44 @@
 ### es的一些需要记住的知识点
 
 - 不管是`keyword`还是`text`类型的`field`，都是以倒排索引的方式保存的
-- **`正排索引（Doc Values）`**是`field`的一个属性，设置后会创建正排索引，支持该字段的排序，聚合等操作
-- **`正排索引（Doc Values）`**列式存储（压缩编码 + 批量读取），比倒排索引遍历更高效，适合海量数据分析。
+- `正排索引（Doc Values）`是`field`的一个属性，设置后会创建正排索引，支持该字段的排序，聚合等操作
+- `正排索引（Doc Values）`列式存储（压缩编码 + 批量读取），比倒排索引遍历更高效，适合海量数据分析。
 - es根据`field`不同的属性创建不同的数据结构来满足不同的场景
 - 所有 `keyword` 和分词的 `text` 字段默认通过倒排索引支持 `term` 精确查询。
+- 无法直接修改已有索引的分词器，可以通过以下方法操作
+  1. 创建新索引并指定新分词器
+  ```json
+  PUT /new_index
+  {
+      "settings": {
+          "analysis": {
+              "analyzer": {
+                  "my_ik_analyzer": { // 自定义分词器名称
+                      "type": "custom",
+                      "tokenizer": "ik_max_word" // 使用 IK 分词器
+                  }
+              }
+          }
+      },
+      "mappings": {
+          "properties": {
+              "content": {
+                  "type": "text",
+                  "analyzer": "my_ik_analyzer", // 指定新分词器
+                  "search_analyzer": "ik_smart" // 可选：指定搜索分词器
+              }
+          }
+      }
+  }
+  ```
+  2. 迁移数据到新索引,使用 `_reindex` 命令
+  ```json
+  POST _reindex
+  {
+    "source": { "index": "old_index" },
+    "dest": { "index": "new_index" }
+  }
+  ```
 
 ## ES存储文档怎么样才能节省空间
 
