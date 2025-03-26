@@ -35,7 +35,7 @@ public class BaseUserVo {
         userVo.setAge(user.getAge());
         userVo.setEmail(user.getEmail());
         userVo.setGender(Optional.ofNullable(user.getGender()).map(BaseDictModel::getDictDataName).orElse(null));
-        userVo.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getDesc).orElse(null));
+        userVo.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getText).orElse(null));
         userVo.setGmtCreate(user.getGmtCreate());
         return userVo;
     }

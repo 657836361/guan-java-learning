@@ -61,7 +61,7 @@ public class BaseUserDto {
         userDto.setAge(user.getAge());
         userDto.setEmail(user.getEmail());
         userDto.setGender(Optional.ofNullable(user.getGender()).map(BaseDictModel::getDictDataName).orElse(null));
-        userDto.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getDesc).orElse(null));
+        userDto.setRole(Optional.ofNullable(user.getRole()).map(SysRoleEnum::getText).orElse(null));
         userDto.setGmtCreate(user.getGmtCreate());
         userDto.setGmtModify(user.getGmtModify());
         userDto.setCreateUser(user.getCreateUser());

@@ -1,10 +1,10 @@
 package com.guan.learning.common.enums;
 
-public interface BaseEnum {
+import com.guan.learning.common.cache.enums.Storable;
 
-    String getCode();
+public interface BaseEnum extends Storable {
 
-    String getDesc();
+    String getText();
 
 }
 

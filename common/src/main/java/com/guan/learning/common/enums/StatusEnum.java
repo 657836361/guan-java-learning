@@ -15,6 +15,6 @@ public enum StatusEnum implements BaseEnum {
 
     private final String code;
 
-    private final String desc;
+    private final String text;
 
 }

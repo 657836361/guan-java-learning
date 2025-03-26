@@ -13,10 +13,10 @@ public enum SysRoleEnum implements BaseEnum {
 
     private final String code;
 
-    private final String desc;
+    private final String text;
 
     @Override
     public String toString() {
-        return this.code + "|" + this.desc;
+        return this.code + "|" + this.text;
     }
 }
