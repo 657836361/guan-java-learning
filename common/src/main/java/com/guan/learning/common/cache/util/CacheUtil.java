@@ -20,19 +20,23 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CacheUtil {
 
+    private static final int CACHE_QUEUE_SIZE = 500;
+    private static final int EXECUTOR_QUEUE_SIZE = 300;
+    private static final int CACHE_TIME_OUT = 1000 * 60 * 5;
+
     private static final Map<String, IStore> TASK_MAP = MapUtil.newHashMap(50);
 
     private static final List<String> SKIP_CACHE_LIST = new ArrayList<>(10);
 
     private static final LFUCache<String, Map<String, Object>> CACHE_DATA_MAP =
-            new LFUCache<>(100, 1000 * 60 * 5);
+            new LFUCache<>(CACHE_QUEUE_SIZE, CACHE_TIME_OUT);
 
 
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(20,
             20,
             0L,
             TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(100),
+            new LinkedBlockingQueue<>(EXECUTOR_QUEUE_SIZE),
             r -> {
                 Thread t = new Thread(r);
                 t.setName("cache-load-thread");
