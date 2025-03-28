@@ -1,9 +1,9 @@
 package com.guan.learning.mybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.guan.learning.common.enums.response.ArgumentErrorResponseEnum;
-import com.guan.learning.common.pojo.response.BaseResponse;
-import com.guan.learning.common.pojo.response.CommonResponse;
+import com.guan.common.enums.response.ArgumentErrorResponseEnum;
+import com.guan.common.pojo.response.BaseResponse;
+import com.guan.common.pojo.response.CommonResponse;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import com.guan.learning.mybatisplus.pojo.BaseUserRequest;
 import com.guan.learning.mybatisplus.service.BaseUserService;

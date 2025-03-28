@@ -1,7 +1,7 @@
 package com.guan.learning.common.config;
 
+import com.guan.datasource.anno.EnableDataSource;
 import com.guan.learning.LearningCombinerApplication;
-import com.guan.learning.anno.EnableDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

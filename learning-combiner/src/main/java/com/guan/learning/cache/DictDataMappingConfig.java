@@ -1,9 +1,9 @@
 package com.guan.learning.cache;
 
 import cn.hutool.core.map.MapUtil;
-import com.guan.learning.common.cache.store.IStore;
-import com.guan.learning.common.cache.store.IstoreConfig;
-import com.guan.learning.dict.mapper.SysDictDataMapper;
+import com.guan.common.cache.store.IStore;
+import com.guan.common.cache.store.IstoreConfig;
+import com.guan.datasource.dict.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

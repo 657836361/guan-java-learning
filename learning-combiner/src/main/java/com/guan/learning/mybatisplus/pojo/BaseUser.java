@@ -6,11 +6,11 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.guan.learning.common.enums.BaseEnumTypeHandler;
-import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.BaseIdBizIdCreateUpdateDeleletedModel;
-import com.guan.learning.dict.DictDataTypeHandler;
-import com.guan.learning.dict.model.BaseDictModel;
+import com.guan.common.enums.BaseEnumTypeHandler;
+import com.guan.common.enums.SysRoleEnum;
+import com.guan.common.pojo.BaseIdBizIdCreateUpdateDeleletedModel;
+import com.guan.datasource.dict.DictDataTypeHandler;
+import com.guan.datasource.dict.model.BaseDictModel;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,10 +1,10 @@
 package com.guan.learning.mybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.guan.learning.common.enums.response.CommonErrorResponseEnum;
-import com.guan.learning.common.exceptions.BusinessException;
-import com.guan.learning.common.pojo.response.BaseResponse;
-import com.guan.learning.common.pojo.response.CommonResponse;
+import com.guan.common.enums.response.CommonErrorResponseEnum;
+import com.guan.common.exceptions.BusinessException;
+import com.guan.common.pojo.response.BaseResponse;
+import com.guan.common.pojo.response.CommonResponse;
 import com.guan.learning.mybatisplus.mapper.BaseUserMapper;
 import com.guan.learning.mybatisplus.mapper.DynamicDataSourceMasterUserMapper;
 import com.guan.learning.mybatisplus.mapper.DynamicDataSourceSlaveUserMapper;

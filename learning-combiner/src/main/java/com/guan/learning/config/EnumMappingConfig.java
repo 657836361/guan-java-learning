@@ -2,13 +2,13 @@ package com.guan.learning.config;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import com.guan.learning.common.cache.enums.Storable;
-import com.guan.learning.common.cache.store.IStore;
-import com.guan.learning.common.cache.store.IstoreConfig;
-import com.guan.learning.common.cache.store.impl.EnumStore;
-import com.guan.learning.common.enums.DeleteStatusEnum;
-import com.guan.learning.common.enums.StatusEnum;
-import com.guan.learning.common.enums.SysRoleEnum;
+import com.guan.common.cache.enums.Storable;
+import com.guan.common.cache.store.IStore;
+import com.guan.common.cache.store.IstoreConfig;
+import com.guan.common.cache.store.impl.EnumStore;
+import com.guan.common.enums.DeleteStatusEnum;
+import com.guan.common.enums.StatusEnum;
+import com.guan.common.enums.SysRoleEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

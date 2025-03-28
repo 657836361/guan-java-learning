@@ -1,8 +1,8 @@
 package com.guan.learning.mybatisplus.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.guan.learning.dynamic.anno.DataSourceFlag;
-import com.guan.learning.dynamic.enums.DataSourceFlagEnum;
+import com.guan.datasource.dynamic.anno.DataSourceFlag;
+import com.guan.datasource.dynamic.enums.DataSourceFlagEnum;
 import com.guan.learning.mybatisplus.pojo.BaseUser;
 import org.apache.ibatis.annotations.Mapper;
 

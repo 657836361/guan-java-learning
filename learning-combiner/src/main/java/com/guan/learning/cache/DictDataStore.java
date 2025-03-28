@@ -2,9 +2,9 @@ package com.guan.learning.cache;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.guan.learning.common.cache.store.IStore;
-import com.guan.learning.dict.mapper.SysDictDataMapper;
-import com.guan.learning.dict.model.SysDictData;
+import com.guan.common.cache.store.IStore;
+import com.guan.datasource.dict.mapper.SysDictDataMapper;
+import com.guan.datasource.dict.model.SysDictData;
 
 import java.util.List;
 import java.util.Map;

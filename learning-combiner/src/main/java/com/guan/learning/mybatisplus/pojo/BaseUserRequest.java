@@ -1,7 +1,7 @@
 package com.guan.learning.mybatisplus.pojo;
 
-import com.guan.learning.common.enums.SysRoleEnum;
-import com.guan.learning.common.pojo.request.PageRequest;
+import com.guan.common.enums.SysRoleEnum;
+import com.guan.common.pojo.request.PageRequest;
 import lombok.Getter;
 import lombok.Setter;
 
