@@ -1,5 +1,5 @@
-com.guan.learning.common.bean.CommonResponseAdvice
-com.guan.learning.common.bean.SensitiveDataSerializer
-com.guan.learning.common.bean.SysRoleEnumConverter
-com.guan.learning.common.exceptions.handler.GlobalExceptionHandler
-com.guan.learning.common.filter.TracerFilter
+com.guan.common.bean.CommonResponseAdvice
+com.guan.common.bean.SensitiveDataSerializer
+com.guan.common.bean.SysRoleEnumConverter
+com.guan.common.exceptions.handler.GlobalExceptionHandler
+com.guan.common.filter.TracerFilter
