@@ -41,5 +41,8 @@ CREATE TABLE `sys_dict_data`
 );
 
 
-INSERT INTO `sys_dict_data` VALUES (1, 'male', '男', 'person_gender', '人类性别', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_dict_data` VALUES (2, 'female', '女', 'person_gender', '人类性别', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (1, 'male', '男', 'sys_user_gender', '人类性别', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (2, 'female', '女', 'sys_user_gender', '人类性别', NULL, NULL, NULL, NULL);
+
+INSERT INTO `sys_dict_data` VALUES (3, 'success', '成功', 'sys_common_status', '系统状态', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (4, 'fail', '失败', 'sys_common_status', '系统状态', NULL, NULL, NULL, NULL);

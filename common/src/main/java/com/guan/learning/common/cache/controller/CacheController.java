@@ -2,7 +2,9 @@ package com.guan.learning.common.cache.controller;
 
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
+import com.guan.learning.common.cache.store.IStore;
 import com.guan.learning.common.cache.store.IstoreConfig;
 import com.guan.learning.common.cache.util.CacheUtil;
 import com.guan.learning.common.enums.response.ArgumentErrorResponseEnum;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +38,12 @@ public class CacheController implements ApplicationRunner {
         if (CollectionUtil.isNotEmpty(storeConfigList)) {
             log.info("load cache data...");
             for (IstoreConfig config : storeConfigList) {
-                CacheUtil.addTaskMap(config.cacheTask());
+                System.out.println(config.getClass().getName());
+                System.out.println(Arrays.toString(config.getClass().getInterfaces()));
+                Map<String, IStore> map = config.cacheTask();
+                if (MapUtil.isNotEmpty(map)) {
+                    CacheUtil.addTaskMap(map);
+                }
             }
             CacheUtil.load();
             log.info("load cache data success...");

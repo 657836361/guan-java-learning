@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @see EnableDataSource
  */
 @EnableAspectJAutoProxy
-//@EnableDataSource(mode = DataSourceMode.DYNAMIC)
+@EnableDataSource
 @EnableAsync
 @ConfigurationPropertiesScan
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)

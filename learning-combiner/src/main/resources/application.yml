@@ -67,6 +67,7 @@ logging:
   config: classpath:logback-spring.xml
 
 mybatis-plus:
+  check-config-location: true
   global-config:
     banner: false
     db-config:
