@@ -4,21 +4,20 @@ server:
   servlet:
     context-path: /learning
   tomcat:
-    uri-encoding: UTF-8
     #一瞬间最大支持的并发的连接数
-    max-connections: 10000
+    max-connections: 5000
     #等待队列长度
-    accept-count: 200
+    accept-count: 1000
+    connection-timeout: 5000ms   # 新增连接超时
+    keep-alive-timeout: 30000ms  # 新增keep-alive配置
     relaxed-Query-Chars:
       - '{'
       - '}'
     threads:
-      # 最大工作线程数量。如果启用了虚拟线程，则没有效果。 默认值=200
-      max: 300
-      # 最小工作线程数量。如果启用了虚拟线程，则没有效果。 默认值=10
-      min-spare: 15
-      # 线程池支持队列的最大容量。此设置仅在值大于0时有效。 默认值=2147483647
-      max-queue-capacity: 2147483647
+      # 最大工作线程数量 根据CPU核心数调整（建议 (核心数 * 200) + 200）。如果启用了虚拟线程，则没有效果。 默认值=200
+      max: 1600
+      # 最小工作线程数量 预热更多线程应对突发流量。如果启用了虚拟线程，则没有效果。 默认值=10
+      min-spare: 100
   compression:
     enabled: true
     mime-types: application/json
