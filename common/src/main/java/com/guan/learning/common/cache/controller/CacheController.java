@@ -38,8 +38,6 @@ public class CacheController implements ApplicationRunner {
         if (CollectionUtil.isNotEmpty(storeConfigList)) {
             log.info("load cache data...");
             for (IstoreConfig config : storeConfigList) {
-                System.out.println(config.getClass().getName());
-                System.out.println(Arrays.toString(config.getClass().getInterfaces()));
                 Map<String, IStore> map = config.cacheTask();
                 if (MapUtil.isNotEmpty(map)) {
                     CacheUtil.addTaskMap(map);
