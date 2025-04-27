@@ -25,12 +25,14 @@ public class DictCacheUtil implements ApplicationContextAware, SmartInitializing
         if (sysDictData != null) {
             return sysDictData;
         }
-        sysDictData = mapper.selectOne(Wrappers.<SysDictData>lambdaQuery().eq(SysDictData::getDictDataCode, dataCode));
-        if (sysDictData != null) {
-            try {
-                return sysDictData;
-            } finally {
-                CACHE_DATA_CODE.put(dataCode, sysDictData);
+        if (mapper != null) {
+            sysDictData = mapper.selectOne(Wrappers.<SysDictData>lambdaQuery().eq(SysDictData::getDictDataCode, dataCode));
+            if (sysDictData != null) {
+                try {
+                    return sysDictData;
+                } finally {
+                    CACHE_DATA_CODE.put(dataCode, sysDictData);
+                }
             }
         }
         return null;
