@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContext;
 
 @Slf4j
 @SpringBootTest
-public class ApplicationTest {
+public class AopTest {
 
     @Autowired
     private ApplicationContext applicationContext;
