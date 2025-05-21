@@ -7,7 +7,7 @@
         <groupId>com.guan.learning</groupId>
         <artifactId>root</artifactId>
         <version>1.0.0</version>
-        <relativePath>../../root/pom.xml</relativePath>
+        <relativePath>../root/pom.xml</relativePath>
     </parent>
 
     <groupId>com.guan.spring.enviroment</groupId>
