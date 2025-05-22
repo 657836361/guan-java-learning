@@ -1,7 +1,7 @@
 package com.guan.datasource.dict.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.guan.common.pojo.BaseIdCreateUpdateModel;
+import com.guan.datasource.pojo.BaseIdCreateUpdateModel;
 import lombok.Getter;
 import lombok.Setter;
 

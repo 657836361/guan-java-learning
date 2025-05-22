@@ -1,4 +1,4 @@
-package com.guan.common.pojo;
+package com.guan.datasource.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
