@@ -1,0 +1,4 @@
+# Spring Boot自动装配
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.guan.distribute.config.DistributedLockConfiguration,\
+com.guan.distribute.zookeeper.ZookeeperConfiguration
