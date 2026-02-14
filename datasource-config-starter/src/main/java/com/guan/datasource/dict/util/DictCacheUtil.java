@@ -1,8 +1,8 @@
 package com.guan.datasource.dict.util;
 
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.LFUCache;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.guan.datasource.dict.mapper.SysDictDataMapper;
 import com.guan.datasource.dict.model.SysDictData;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +14,13 @@ import org.springframework.context.ApplicationContextAware;
 @Slf4j
 public class DictCacheUtil implements ApplicationContextAware, SmartInitializingSingleton {
 
-    public static final int CACHE_QUEUE_SIZE = 10;
 
-    private static final LFUCache<String, SysDictData> CACHE_DATA_CODE = CacheUtil.newLFUCache(CACHE_QUEUE_SIZE);
+    private static final Cache<String, SysDictData> CACHE_DATA_CODE = CacheBuilder.newBuilder().build();
 
     private static SysDictDataMapper mapper;
 
     public static SysDictData get(String dataCode) {
-        SysDictData sysDictData = CACHE_DATA_CODE.get(dataCode);
+        SysDictData sysDictData = CACHE_DATA_CODE.getIfPresent(dataCode);
         if (sysDictData != null) {
             return sysDictData;
         }
@@ -39,7 +38,7 @@ public class DictCacheUtil implements ApplicationContextAware, SmartInitializing
     }
 
     public static void cacheRefresh() {
-        CACHE_DATA_CODE.clear();
+        CACHE_DATA_CODE.invalidateAll();
         init();
     }
 
@@ -60,9 +59,6 @@ public class DictCacheUtil implements ApplicationContextAware, SmartInitializing
 
     private static void init() {
         mapper.selectList(Wrappers.emptyWrapper(), resultContext -> {
-            if (resultContext.getResultCount() > CACHE_QUEUE_SIZE) {
-                return;
-            }
             SysDictData sysDictData = resultContext.getResultObject();
             CACHE_DATA_CODE.put(sysDictData.getDictDataCode(), sysDictData);
         });

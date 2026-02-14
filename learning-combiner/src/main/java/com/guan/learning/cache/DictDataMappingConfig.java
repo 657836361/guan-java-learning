@@ -1,6 +1,6 @@
 package com.guan.learning.cache;
 
-import cn.hutool.core.map.MapUtil;
+import com.google.common.collect.Maps;
 import com.guan.common.cache.store.IStore;
 import com.guan.common.cache.store.IstoreConfig;
 import com.guan.datasource.dict.mapper.SysDictDataMapper;
@@ -19,7 +19,7 @@ public class DictDataMappingConfig implements IstoreConfig {
     @Override
     public Map<String, IStore> cacheTask() {
         if (mapper != null) {
-            HashMap<String, IStore> storesMap = MapUtil.newHashMap(2);
+            HashMap<String, IStore> storesMap = Maps.newHashMapWithExpectedSize(2);
             addDictDataStore(storesMap, "SYS_USER_GENDER");
             addDictDataStore(storesMap, "SYS_COMMON_STATUS");
             return storesMap;

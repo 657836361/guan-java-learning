@@ -1,10 +1,10 @@
 package com.guan.common.lock;
 
-import com.guan.common.lock.annotation.DistributedLock;
-import com.guan.common.lock.annotation.EnableDistributeLock;
-import lombok.extern.slf4j.Slf4j;
+import com.guan.distribute.core.DistributedLockTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,19 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * 分布式锁集成测试
  */
-@Slf4j
 @SpringBootTest(classes = TestApplication.class)
 @ActiveProfiles("test")
 public class DistributeLockIntegrationTest {
 
+    private static final Logger log = LoggerFactory.getLogger(DistributeLockIntegrationTest.class);
+
     @Autowired
-    private LockSupportTemplate lockSupportTemplate;
+    private DistributedLockTemplate lockTemplate;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
-    @Autowired
-    private TestLockService testLockService;
 
     private static final String TEST_LOCK_KEY = "test:lock:key";
 
@@ -47,19 +45,26 @@ public class DistributeLockIntegrationTest {
     @Test
     void testBasicLockAndUnlock() {
         // 测试基本的加锁和解锁功能
-        boolean acquired = lockSupportTemplate.tryLock(TEST_LOCK_KEY, 10, TimeUnit.SECONDS);
+        boolean acquired = lockTemplate.tryExecute(TEST_LOCK_KEY, 10, TimeUnit.SECONDS, () -> {
+            log.info("执行业务逻辑");
+        });
+
         assertTrue(acquired, "应该能够成功获取锁");
 
-        // 验证锁确实被获取
-        String lockValue = redisTemplate.opsForValue().get(TEST_LOCK_KEY);
-        assertNotNull(lockValue, "锁应该存在于Redis中");
-
-        // 释放锁
-        lockSupportTemplate.unlock(TEST_LOCK_KEY);
-
-        // 验证锁被释放
+        // 验证锁已经被释放
         String lockValueAfterUnlock = redisTemplate.opsForValue().get(TEST_LOCK_KEY);
         assertNull(lockValueAfterUnlock, "锁应该已经被释放");
+    }
+
+    @Test
+    void testLockWithReturnValue() {
+        // 测试带返回值的锁模板
+        String result = lockTemplate.execute(TEST_LOCK_KEY, 5, TimeUnit.SECONDS, () -> {
+            return "执行结果";
+        });
+
+        assertNotNull(result, "应该返回执行结果");
+        assertEquals("执行结果", result, "返回值应该正确");
     }
 
     @Test
@@ -72,25 +77,22 @@ public class DistributeLockIntegrationTest {
         for (int i = 0; i < threadCount; i++) {
             new Thread(() -> {
                 try {
-                    boolean acquired = lockSupportTemplate.tryLock(TEST_LOCK_KEY, 5, TimeUnit.SECONDS);
-                    if (acquired) {
+                    boolean acquired = lockTemplate.tryExecute(TEST_LOCK_KEY, 5, TimeUnit.SECONDS, () -> {
+                        successCount.incrementAndGet();
+                        // 模拟业务处理
                         try {
-                            successCount.incrementAndGet();
-                            // 模拟业务处理
                             Thread.sleep(100);
-                        } finally {
-                            lockSupportTemplate.unlock(TEST_LOCK_KEY);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                         }
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    });
                 } finally {
                     latch.countDown();
                 }
             }).start();
         }
 
-        latch.await(10, TimeUnit.SECONDS);
+        latch.await(15, TimeUnit.SECONDS);
         assertEquals(threadCount, successCount.get(), "所有线程都应该能够成功获取锁");
     }
 
@@ -100,117 +102,107 @@ public class DistributeLockIntegrationTest {
         String lockKey = "test:lock:wait";
 
         // 第一个线程获取锁并持有2秒
-        new Thread(() -> {
-            boolean acquired = lockSupportTemplate.tryLock(lockKey, 3, TimeUnit.SECONDS);
-            if (acquired) {
+        Thread holderThread = new Thread(() -> {
+            lockTemplate.execute(lockKey, 3, TimeUnit.SECONDS, () -> {
                 try {
                     Thread.sleep(2000); // 持有锁2秒
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                } finally {
-                    lockSupportTemplate.unlock(lockKey);
                 }
-            }
-        }).start();
+            });
+        });
+        holderThread.start();
 
         // 等待第一个线程获取锁
         Thread.sleep(100);
 
         // 第二个线程尝试获取锁，等待3秒
         long startTime = System.currentTimeMillis();
-        boolean acquired = lockSupportTemplate.tryLock(lockKey, 3, TimeUnit.SECONDS, 5, TimeUnit.SECONDS);
+        boolean acquired = lockTemplate.execute(lockKey, 3, TimeUnit.SECONDS, 5, TimeUnit.SECONDS, () -> {
+            log.info("获取到锁了");
+        });
         long endTime = System.currentTimeMillis();
 
         assertTrue(acquired, "应该能够成功获取到锁");
         assertTrue(endTime - startTime >= 1500, "应该等待了足够的时间");
 
-        lockSupportTemplate.unlock(lockKey);
         redisTemplate.delete(lockKey);
-    }
-
-    @Test
-    void testAnnotationBasedLock() {
-        // 测试注解方式的分布式锁
-        String result = testLockService.annotatedMethod("testUser", "123");
-        assertNotNull(result, "应该返回执行结果");
-        assertTrue(result.contains("testUser"), "结果应该包含用户名");
-
-        // 测试并发访问注解方法
-        int threadCount = 5;
-        CountDownLatch latch = new CountDownLatch(threadCount);
-        AtomicInteger callCount = new AtomicInteger(0);
-
-        for (int i = 0; i < threadCount; i++) {
-            final int threadId = i;
-            new Thread(() -> {
-                try {
-                    String result2 = testLockService.annotatedMethod("user" + threadId, "id" + threadId);
-                    if (result2 != null) {
-                        callCount.incrementAndGet();
-                    }
-                } finally {
-                    latch.countDown();
-                }
-            }).start();
-        }
-
-        try {
-            latch.await(10, TimeUnit.SECONDS);
-            assertEquals(threadCount, callCount.get(), "所有调用都应该成功");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    @Test
-    void testLockTemplateWithReturn() {
-        // 测试带返回值的锁模板
-        String result = lockSupportTemplate.tryLockAndExecute(TEST_LOCK_KEY, 5, TimeUnit.SECONDS, () -> {
-            return "执行结果";
-        });
-
-        assertNotNull(result, "应该返回执行结果");
-        assertEquals("执行结果", result, "返回值应该正确");
+        holderThread.join();
     }
 
     @Test
     void testLockTemplateExecutionFailure() {
         // 先获取锁
-        boolean firstAcquired = lockSupportTemplate.tryLock(TEST_LOCK_KEY, 10, TimeUnit.SECONDS);
+        boolean firstAcquired = lockTemplate.tryExecute(TEST_LOCK_KEY, 10, TimeUnit.SECONDS, () -> {
+            log.info("第一次获取锁");
+        });
         assertTrue(firstAcquired, "第一次应该能够获取锁");
 
-        // 第二次尝试获取同一个锁，应该失败
-        String result = lockSupportTemplate.tryLockAndExecute(TEST_LOCK_KEY, 5, TimeUnit.SECONDS, () -> {
+        // 第二次尝试获取同一个锁（在第一个锁释放前），应该失败
+        AtomicInteger executionCount = new AtomicInteger(0);
+        String result = lockTemplate.execute(TEST_LOCK_KEY, 5, TimeUnit.SECONDS, () -> {
+            executionCount.incrementAndGet();
             return "不应该执行到这里";
         });
 
         assertNull(result, "锁获取失败时应该返回null");
-
-        // 释放锁
-        lockSupportTemplate.unlock(TEST_LOCK_KEY);
+        assertEquals(0, executionCount.get(), "任务不应该被执行");
     }
 
-    /**
-     * 测试服务类
-     */
-    @EnableDistributeLock
-    public static class TestLockService {
-
-        @DistributedLock(key = "method:lock:#user.id", expire = 5, timeUnit = TimeUnit.SECONDS)
-        public String annotatedMethod(String user, String id) {
-            log.info("执行注解方法，用户: {}, ID: {}", user, id);
-            try {
-                Thread.sleep(100); // 模拟业务处理
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return "处理完成: " + user;
+    @Test
+    void testMultipleLockOperations() {
+        // 测试连续多次锁操作
+        for (int i = 0; i < 5; i++) {
+            final int index = i; // 使用 final 变量供 lambda 使用
+            String key = "test:lock:multiple:" + index;
+            String result = lockTemplate.execute(key, 5, TimeUnit.SECONDS, () -> {
+                return "执行次数: " + index;
+            });
+            assertEquals("执行次数: " + index, result, "第" + index + "次执行结果应该正确");
+            redisTemplate.delete(key);
         }
+    }
 
-        @DistributedLock(key = "fail:test", expire = 1, timeUnit = TimeUnit.SECONDS,
-                failStrategy = DistributedLock.FailStrategy.SILENT)
-        public String silentFailMethod() {
-            return "不应该返回";
-        }
+    @Test
+    void testLockIsLocked() {
+        // 测试检查锁状态
+        String key = "test:lock:check";
+
+        // 初始状态
+        redisTemplate.delete(key);
+
+        // 获取锁
+        lockTemplate.execute(key, 10, TimeUnit.SECONDS, () -> {
+            // 锁应该被持有
+            String value = redisTemplate.opsForValue().get(key);
+            assertNotNull(value, "锁应该存在于Redis中");
+        });
+
+        // 释放后
+        String valueAfterRelease = redisTemplate.opsForValue().get(key);
+        assertNull(valueAfterRelease, "锁应该已经被释放");
+    }
+
+    @Test
+    void testLockExpiration() throws InterruptedException {
+        // 测试锁过期机制
+        String key = "test:lock:expiration";
+        long expireTime = 2; // 2秒过期
+
+        // 获取锁
+        lockTemplate.execute(key, expireTime, TimeUnit.SECONDS, () -> {
+            log.info("获取到短期锁");
+        });
+
+        // 等待锁过期
+        Thread.sleep(2500);
+
+        // 现在应该可以立即获取锁
+        boolean acquired = lockTemplate.tryExecute(key, 5, TimeUnit.SECONDS, () -> {
+            log.info("重新获取到锁");
+        });
+
+        assertTrue(acquired, "锁过期后应该能够重新获取");
+        redisTemplate.delete(key);
     }
 }

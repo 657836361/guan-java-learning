@@ -1,6 +1,6 @@
 package com.guan.learning.cache;
 
-import cn.hutool.core.lang.Assert;
+
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.guan.common.cache.store.IStore;
 import com.guan.datasource.dict.mapper.SysDictDataMapper;
@@ -15,8 +15,6 @@ public class DictDataStore implements IStore {
     private SysDictDataMapper mapper;
 
     public DictDataStore(String dictType, SysDictDataMapper mapper) {
-        Assert.notEmpty(dictType, "dictType is empty");
-        Assert.notNull(mapper, "mapper is null");
         this.dictType = dictType;
         this.mapper = mapper;
     }

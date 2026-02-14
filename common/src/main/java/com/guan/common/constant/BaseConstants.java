@@ -1,8 +1,10 @@
 package com.guan.common.constant;
 
-import cn.hutool.core.thread.ThreadUtil;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class BaseConstants {
@@ -17,9 +19,9 @@ public class BaseConstants {
             Pattern.compile("^([a-zA-Z0-9]+)@([a-zA-Z0-9.-]+)\\.([a-zA-Z]{2,6})$");
 
 
-    public static final ExecutorService EXECUTOR_SERVICE = ThreadUtil.newExecutor(
+    public static final ExecutorService EXECUTOR_SERVICE = new ThreadPoolExecutor(
             Runtime.getRuntime().availableProcessors(),
             Runtime.getRuntime().availableProcessors(),
-            500
+            60, TimeUnit.SECONDS, new LinkedBlockingDeque<>()
     );
 }

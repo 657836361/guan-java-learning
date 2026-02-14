@@ -1,6 +1,5 @@
 package com.guan.learning.file.controller;
 
-import cn.hutool.core.io.resource.ResourceUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,13 +37,15 @@ public class DownloadController {
 
     @GetMapping("/anathor")
     public ResponseEntity<byte[]> downloadAnathor() throws Exception {
-        InputStream stream = ResourceUtil.getStream("application.yml");
-        byte[] bytes = stream.readAllBytes();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=example.txt");
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(bytes);
+        ClassPathResource classPathResource = new ClassPathResource("application.yml");
+        try (InputStream stream = classPathResource.getInputStream()) {
+            byte[] bytes = stream.readAllBytes();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=example.txt");
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(bytes);
+        }
     }
 }

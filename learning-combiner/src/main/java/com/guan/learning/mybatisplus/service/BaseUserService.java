@@ -1,6 +1,5 @@
 package com.guan.learning.mybatisplus.service;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -13,6 +12,7 @@ import com.guan.learning.mybatisplus.pojo.BaseUser;
 import com.guan.learning.mybatisplus.pojo.BaseUserRequest;
 import com.guan.learning.mybatisplus.pojo.BaseUserVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -129,11 +129,11 @@ public class BaseUserService {
         return userMapper.selectPage(
                 Page.of(userRequest.getPageNo(), userRequest.getPageSize()),
                 Wrappers.lambdaQuery(BaseUser.class).
-                        eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
+                        eq(StringUtils.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
                         between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
                                 BaseUser::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
-                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
-                        eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
+                        likeRight(StringUtils.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
+                        eq(StringUtils.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
                         eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
     }
@@ -145,11 +145,11 @@ public class BaseUserService {
         return userMapper.selectPage(
                 Page.of(Optional.ofNullable(userRequest.getPageNo()).orElse(1), Optional.ofNullable(userRequest.getPageSize()).orElse(20)),
                 Wrappers.lambdaQuery(BaseUser.class).
-                        eq(StrUtil.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
+                        eq(StringUtils.isNotEmpty(userRequest.getName()), BaseUser::getName, userRequest.getName()).
                         between(userRequest.getStartAge() != null && userRequest.getEndAge() != null,
                                 BaseUser::getAge, userRequest.getStartAge(), userRequest.getEndAge()).
-                        likeRight(StrUtil.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
-                        eq(StrUtil.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
+                        likeRight(StringUtils.isNotEmpty(userRequest.getEmail()), BaseUser::getEmail, userRequest.getEmail()).
+                        eq(StringUtils.isNotEmpty(userRequest.getGender()), BaseUser::getGender, userRequest.getGender()).
                         eq(userRequest.getRole() != null, BaseUser::getRole, Optional.ofNullable(userRequest.getRole()).map(SysRoleEnum::getCode).orElse(""))
         );
     }

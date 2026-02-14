@@ -1,6 +1,5 @@
 package com.guan.learning.excel.controller;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.idev.excel.ExcelWriter;
 import cn.idev.excel.FastExcel;
 import cn.idev.excel.write.metadata.WriteSheet;
@@ -18,6 +17,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,8 +63,9 @@ public class ExcelController {
                     map(BaseUserDto::userToUserDto).
                     collect(Collectors.toList());
         }
+        RandomUtils insecure = RandomUtils.insecure();
         return IntStream.
-                range(1000, RandomUtil.randomInt(5000, 100000)).
+                range(1000, insecure.randomInt(5000, 100000)).
                 mapToObj(i -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                 collect(Collectors.toList());
     };
@@ -88,6 +89,7 @@ public class ExcelController {
 
     @GetMapping("/export/multi/sheet")
     public void exportMultiSheet() {
+        RandomUtils insecure = RandomUtils.insecure();
         setResponseInfo();
         try (ExcelWriter excelWriter = FastExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
             for (int i = 0; i < 5; i++) {
@@ -100,7 +102,7 @@ public class ExcelController {
                                 Wrappers.emptyWrapper()).stream().map(BaseUserDto::userToUserDto).collect(Collectors.toList());
                     }
                     return IntStream.
-                            range(1000, RandomUtil.randomInt(5000, 100000)).
+                            range(1000, insecure.randomInt(5000, 100000)).
                             mapToObj(ran -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                             collect(Collectors.toList());
                 }, writeSheet);
@@ -116,9 +118,10 @@ public class ExcelController {
     @Deprecated
     @SuppressWarnings("unchecked")
     public void exportMultiSheetThread() {
+        RandomUtils insecure = RandomUtils.insecure();
         setResponseInfo();
         try (ExcelWriter excelWriter = FastExcel.write(response.getOutputStream(), BaseUserDto.class).build()) {
-            int count = RandomUtil.randomInt(4, 7);
+            int count = insecure.randomInt(4, 7);
             CompletableFuture<Void>[] arrays = new CompletableFuture[count];
             for (int i = 0; i < count; i++) {
                 int finalI = i;
@@ -130,7 +133,7 @@ public class ExcelController {
                                     Wrappers.emptyWrapper()).stream().map(BaseUserDto::userToUserDto).collect(Collectors.toList());
                         }
                         return IntStream.
-                                range(1000, RandomUtil.randomInt(5000, 100000)).
+                                range(1000, insecure.randomInt(5000, 100000)).
                                 mapToObj(ran -> BaseUserDto.userToUserDto(BaseUser.generateRandomUserFullField())).
                                 collect(Collectors.toList());
                     }, writeSheet);

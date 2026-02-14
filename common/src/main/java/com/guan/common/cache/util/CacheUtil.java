@@ -1,10 +1,13 @@
 package com.guan.common.cache.util;
 
-import cn.hutool.cache.impl.LFUCache;
-import cn.hutool.core.map.MapUtil;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Maps;
 import com.guan.common.cache.store.IStore;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,14 +25,18 @@ public class CacheUtil {
 
     private static final int CACHE_QUEUE_SIZE = 500;
     private static final int EXECUTOR_QUEUE_SIZE = 300;
-    private static final int CACHE_TIME_OUT = 1000 * 60 * 5;
 
-    private static final Map<String, IStore> TASK_MAP = MapUtil.newHashMap(50);
+    private static final Map<String, IStore> TASK_MAP = Maps.newHashMapWithExpectedSize(50);
 
     private static final List<String> SKIP_CACHE_LIST = new ArrayList<>(10);
 
-    private static final LFUCache<String, Map<String, Object>> CACHE_DATA_MAP =
-            new LFUCache<>(CACHE_QUEUE_SIZE, CACHE_TIME_OUT);
+
+    private static final Cache<String, Map<String, Object>> CACHE_DATA_MAP = CacheBuilder.newBuilder()
+            .initialCapacity(CACHE_QUEUE_SIZE / 5)
+            .maximumSize(CACHE_QUEUE_SIZE)
+            .expireAfterAccess(Duration.ofSeconds(3600))
+            .expireAfterWrite(Duration.ofHours(2))
+            .build();
 
 
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(20,
@@ -53,7 +60,7 @@ public class CacheUtil {
 
 
     public static void addTaskMap(Map<String, IStore> taskMap) {
-        if (!MapUtil.isEmpty(taskMap)) {
+        if (!MapUtils.isEmpty(taskMap)) {
             TASK_MAP.putAll(taskMap);
         }
     }
@@ -76,7 +83,7 @@ public class CacheUtil {
                         Function.identity(),
                         key -> get(key, true),
                         (existing, replacement) -> replacement,
-                        () -> MapUtil.newHashMap(keys.length)
+                        () -> Maps.newHashMapWithExpectedSize(keys.length)
                 ));
     }
 
@@ -84,25 +91,34 @@ public class CacheUtil {
         if (SKIP_CACHE_LIST.contains(key)) {
             return TASK_MAP.get(key).load();
         }
-        return CACHE_DATA_MAP.get(key, () -> {
-            if (TASK_MAP.containsKey(key)) {
-                Future<Map<String, Object>> future = EXECUTOR.submit(() -> TASK_MAP.get(key).load());
-                try {
-                    return future.get(5, TimeUnit.SECONDS);
-                } catch (Exception e) {
-                    if (silent) {
-                        log.warn("cache key [" + key + "] load error", e);
-                        return Collections.emptyMap();
+
+        try {
+            return CACHE_DATA_MAP.get(key, () -> {
+                if (TASK_MAP.containsKey(key)) {
+                    Future<Map<String, Object>> future = EXECUTOR.submit(() -> TASK_MAP.get(key).load());
+                    try {
+                        return future.get(5, TimeUnit.SECONDS);
+                    } catch (Exception e) {
+                        if (silent) {
+                            log.warn("cache key [" + key + "] load error", e);
+                            return Collections.emptyMap();
+                        }
+                        throw e;
                     }
-                    throw e;
+                } else {
+                    if (!silent) {
+                        throw new IllegalArgumentException("cache key [" + key + "] not found");
+                    }
+                    log.warn("cache key [{}] not found", key);
+                    return Collections.emptyMap();
                 }
-            } else {
-                if (!silent) {
-                    throw new IllegalArgumentException("cache key [" + key + "] not found");
-                }
-                log.warn("cache key [{}] not found", key);
-                return Collections.emptyMap();
+            });
+        } catch (Exception e) {
+            if (!silent) {
+                throw new IllegalArgumentException("cache key [" + key + "] not found");
             }
-        });
+            log.warn("cache key [{}] init error", key);
+            return Collections.emptyMap();
+        }
     }
 }

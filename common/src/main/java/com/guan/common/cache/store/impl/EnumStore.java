@@ -1,7 +1,7 @@
 package com.guan.common.cache.store.impl;
 
 
-import cn.hutool.core.map.MapUtil;
+import com.google.common.collect.Maps;
 import com.guan.common.cache.enums.Storable;
 import com.guan.common.cache.store.IStore;
 
@@ -14,7 +14,7 @@ public class EnumStore implements IStore {
     public EnumStore(Class<? extends Storable> clazz) {
         if (clazz.isEnum()) {
             Storable[] enumConstants = clazz.getEnumConstants();
-            configMap = MapUtil.newHashMap(enumConstants.length);
+            configMap = Maps.newHashMapWithExpectedSize(enumConstants.length);
 
             for (Storable constant : enumConstants) {
                 configMap.put(constant.getCode(), constant.getText());

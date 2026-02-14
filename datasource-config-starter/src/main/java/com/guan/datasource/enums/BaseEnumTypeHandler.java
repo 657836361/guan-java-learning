@@ -1,6 +1,7 @@
-package com.guan.common.enums;
+package com.guan.datasource.enums;
 
-import cn.hutool.core.util.StrUtil;
+import com.guan.common.enums.BaseEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
@@ -39,7 +40,7 @@ public class BaseEnumTypeHandler implements TypeHandler<BaseEnum> {
     @Override
     public BaseEnum getResult(ResultSet rs, String columnName) throws SQLException {
         String code = rs.getString(columnName);
-        if (StrUtil.isEmpty(code)) {
+        if (StringUtils.isEmpty(code)) {
             return null;
         }
         return convert(code);
@@ -48,7 +49,7 @@ public class BaseEnumTypeHandler implements TypeHandler<BaseEnum> {
     @Override
     public BaseEnum getResult(ResultSet rs, int columnIndex) throws SQLException {
         String code = rs.getString(columnIndex);
-        if (StrUtil.isEmpty(code)) {
+        if (StringUtils.isEmpty(code)) {
             return null;
         }
         return convert(rs.getString(columnIndex));
@@ -57,7 +58,7 @@ public class BaseEnumTypeHandler implements TypeHandler<BaseEnum> {
     @Override
     public BaseEnum getResult(CallableStatement cs, int columnIndex) throws SQLException {
         String code = cs.getString(columnIndex);
-        if (StrUtil.isEmpty(code)) {
+        if (StringUtils.isEmpty(code)) {
             return null;
         }
         return convert(cs.getString(columnIndex));

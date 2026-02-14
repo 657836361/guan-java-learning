@@ -1,13 +1,13 @@
 package com.guan.datasource.common;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
+import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 public class AutoFillingMetaObjectHandler implements MetaObjectHandler {
@@ -19,16 +19,16 @@ public class AutoFillingMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "bizId", String.class, IdUtil.fastSimpleUUID());
-        this.strictInsertFill(metaObject, "gmtCreate", Date.class, DateUtil.date());
+        this.strictInsertFill(metaObject, "bizId", String.class, UUID.randomUUID().toString());
+        this.strictInsertFill(metaObject, "gmtCreate", Date.class, Date.from(Instant.now()));
         this.strictInsertFill(metaObject, "createUser", String.class, "auto");
-        this.strictInsertFill(metaObject, "gmtModify", Date.class, DateUtil.date());
+        this.strictInsertFill(metaObject, "gmtModify", Date.class, Date.from(Instant.now()));
         this.strictInsertFill(metaObject, "modifyUser", String.class, "auto");
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "gmtModify", Date.class, DateUtil.date());
+        this.strictUpdateFill(metaObject, "gmtModify", Date.class, Date.from(Instant.now()));
         this.strictUpdateFill(metaObject, "modifyUser", String.class, "auto");
     }
 }

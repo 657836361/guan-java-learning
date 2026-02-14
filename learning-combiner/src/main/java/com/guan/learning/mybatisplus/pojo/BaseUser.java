@@ -1,20 +1,22 @@
 package com.guan.learning.mybatisplus.pojo;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.guan.common.enums.BaseEnumTypeHandler;
 import com.guan.common.enums.SysRoleEnum;
-import com.guan.common.pojo.BaseIdBizIdCreateUpdateDeleletedModel;
 import com.guan.datasource.dict.DictDataTypeHandler;
 import com.guan.datasource.dict.model.BaseDictModel;
+import com.guan.datasource.enums.BaseEnumTypeHandler;
+import com.guan.datasource.pojo.BaseIdBizIdCreateUpdateDeleletedModel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -29,28 +31,31 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
     private SysRoleEnum role;
 
     public static BaseUser generateRandomUser() {
+        RandomUtils insecure = RandomUtils.insecure();
+        RandomStringUtils insecure1 = RandomStringUtils.insecure();
+
         BaseUser user = new BaseUser();
-        user.setAge(RandomUtil.randomInt(0, 99));
+        user.setAge(insecure.randomInt(0, 99));
         StringBuilder name = new StringBuilder();
-        int randomInt = RandomUtil.randomInt(2, 6);
+        int randomInt = insecure.randomInt(2, 6);
         for (int i = 0; i < randomInt; i++) {
-            name.append(RandomUtil.randomChinese());
+            name.append(insecure.randomInt(0x4E00, 0x9FA5 - 0x4E00 + 1));
         }
         user.setName(name.toString());
-        user.setEmail(RandomUtil.randomString(RandomUtil.randomInt(6, 10)) +
+        user.setEmail(insecure1.nextAlphanumeric(insecure.randomInt(6, 10)) +
                 "@" +
-                RandomUtil.randomString(RandomUtil.randomInt(2, 5)) +
-                ".com" + (RandomUtil.randomBoolean() ? ".cn" : ""));
+                insecure1.nextAlphanumeric(insecure.randomInt(2, 5)) +
+                ".com" + (insecure.randomBoolean() ? ".cn" : ""));
         BaseDictModel gender = new BaseDictModel();
-        gender.setDictDataCode(RandomUtil.randomBoolean() ? "female" : "male");
+        gender.setDictDataCode(insecure.randomBoolean() ? "female" : "male");
         user.setGender(gender);
-        user.setRole(RandomUtil.randomBoolean() ? SysRoleEnum.USER : SysRoleEnum.ADMIN);
+        user.setRole(insecure.randomBoolean() ? SysRoleEnum.USER : SysRoleEnum.ADMIN);
         return user;
     }
 
     public static BaseUser generateRandomUser(BaseUser user) {
         user.setId(IdWorker.getId());
-        user.setBizId(IdUtil.fastSimpleUUID());
+        user.setBizId(UUID.randomUUID().toString());
         BaseDictModel gender = user.getGender();
         if (gender.getDictDataCode().equals("female")) {
             gender.setDictDataName("女");
@@ -58,9 +63,9 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
             gender.setDictDataName("男");
         }
         user.setCreateUser("generate");
-        user.setGmtCreate(DateUtil.date());
+        user.setGmtCreate(Date.from(Instant.now()));
         user.setModifyUser("generate");
-        user.setGmtModify(DateUtil.date());
+        user.setGmtModify(Date.from(Instant.now()));
         return user;
     }
 
@@ -74,9 +79,9 @@ public class BaseUser extends BaseIdBizIdCreateUpdateDeleletedModel {
             gender.setDictDataName("男");
         }
         user.setCreateUser("generate");
-        user.setGmtCreate(DateUtil.date());
+        user.setGmtCreate(Date.from(Instant.now()));
         user.setModifyUser("generate");
-        user.setGmtModify(DateUtil.date());
+        user.setGmtModify(Date.from(Instant.now()));
         return user;
     }
 

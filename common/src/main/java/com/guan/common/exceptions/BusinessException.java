@@ -1,8 +1,8 @@
 package com.guan.common.exceptions;
 
 
-import cn.hutool.core.util.StrUtil;
 import com.guan.common.enums.response.ErrorResponseEnum;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 业务异常
@@ -19,7 +19,7 @@ public class BusinessException extends BaseException {
     }
 
     public BusinessException(ErrorResponseEnum responseEnum, String message) {
-        super(responseEnum.getCode(), StrUtil.isBlank(message) ? responseEnum.getMessage() : message, responseEnum.getSuccess());
+        super(responseEnum.getCode(), StringUtils.isBlank(message) ? responseEnum.getMessage() : message, responseEnum.getSuccess());
     }
 
     public BusinessException(ErrorResponseEnum responseEnum, Object[] args, String message) {

@@ -1,6 +1,5 @@
 package com.guan.learning.redis.controller;
 
-import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("/redis")
@@ -27,7 +28,7 @@ public class RedisController implements ApplicationRunner {
     @GetMapping("")
     public String add() {
         for (int i = 0; i < 30000; i++) {
-            String uuid = IdUtil.fastUUID();
+            String uuid = UUID.randomUUID().toString();
             redisTemplate.opsForValue().set(uuid, uuid);
         }
         return "ok";

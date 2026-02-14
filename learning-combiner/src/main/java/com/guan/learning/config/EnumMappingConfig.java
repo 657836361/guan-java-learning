@@ -1,7 +1,6 @@
 package com.guan.learning.config;
 
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Maps;
 import com.guan.common.cache.enums.Storable;
 import com.guan.common.cache.store.IStore;
 import com.guan.common.cache.store.IstoreConfig;
@@ -9,6 +8,8 @@ import com.guan.common.cache.store.impl.EnumStore;
 import com.guan.common.enums.DeleteStatusEnum;
 import com.guan.common.enums.StatusEnum;
 import com.guan.common.enums.SysRoleEnum;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.CaseUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class EnumMappingConfig implements IstoreConfig {
     @Override
     public Map<String, IStore> cacheTask() {
-        HashMap<String, IStore> storesMap = MapUtil.newHashMap(3);
+        HashMap<String, IStore> storesMap = Maps.newHashMapWithExpectedSize(3);
         addEnumStore(storesMap, StatusEnum.class, null);
         addEnumStore(storesMap, DeleteStatusEnum.class, null);
         addEnumStore(storesMap, SysRoleEnum.class, null);
@@ -38,8 +39,9 @@ public class EnumMappingConfig implements IstoreConfig {
      */
     private void addEnumStore(HashMap<String, IStore> storesMap, Class<? extends Storable> enumClass, String enumKey) {
         String key = enumKey;
-        if (StrUtil.isEmpty(key)) {
-            key = StrUtil.toUnderlineCase(enumClass.getSimpleName()).toUpperCase(Locale.ROOT);
+        if (StringUtils.isEmpty(key)) {
+            String camelCase = CaseUtils.toCamelCase(enumClass.getSimpleName(), false);
+            key = camelCase.toUpperCase(Locale.ROOT);
         }
         IStore store = new EnumStore(enumClass);
         storesMap.put(key, store);
